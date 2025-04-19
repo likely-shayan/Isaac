@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(IsaacLib
   src/vector2d.cpp
+  src/vector3d.cpp
 )
 
 target_include_directories(IsaacLib

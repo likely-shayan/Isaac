@@ -1,11 +1,13 @@
 #ifndef VECTOR2D_HPP_
 #define VECTOR2D_HPP_
 
+#include <array>
+#include <string>
+
 namespace Issac
 {
   struct vector2d {
-    
-    float x, y;
+    std::array<float, 2> components;
 
     vector2d(const float& _x, const float& _y);
 
@@ -14,6 +16,8 @@ namespace Issac
     float magnitude() const;
 
     static float dot(const vector2d& lhs, const vector2d& rhs);
+
+    std::string print() const;
   };
   
 } // namespace Issac
