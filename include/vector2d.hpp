@@ -9,9 +9,19 @@ namespace Issac
   struct vector2d {
     std::array<float, 2> components;
 
+    vector2d();
+
     vector2d(const float& _x, const float& _y);
 
+    vector2d(const vector2d&& other);
+
     vector2d operator+(const vector2d& rhs) const;
+
+    vector2d operator-(const vector2d& rhs) const;
+
+    vector2d operator*(const float& scalar) const;
+
+    vector2d operator/(const float& scalar) const;
 
     float magnitude() const;
 

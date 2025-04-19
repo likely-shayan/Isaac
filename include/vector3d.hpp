@@ -9,9 +9,19 @@ namespace Issac
   struct vector3d {
     std::array<float, 3> components;
 
+    vector3d();
+
     vector3d(const float& _x, const float& _y, const float& _z);
 
+    vector3d(const vector3d&& other);
+
     vector3d operator+(const vector3d& rhs) const;
+
+    vector3d operator-(const vector3d& rhs) const;
+
+    vector3d operator*(const float& scalar) const;
+
+    vector3d operator/(const float& scalar) const;
 
     float magnitude() const;
 
