@@ -4,7 +4,7 @@
 #include <array>
 #include <string>
 
-namespace Issac
+namespace Isaac
 {
   struct vector2d {
     std::array<float, 2> components;
@@ -30,7 +30,7 @@ namespace Issac
     std::string print() const;
   };
   
-} // namespace Issac
+} // namespace Isaac
 
 
 #endif // VECTOR2D_HPP_

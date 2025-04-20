@@ -2,7 +2,7 @@
 #include "exceptions.hpp"
 #include <cmath>
 
-using namespace Issac;
+using namespace Isaac;
 
 vector3d::vector3d() : components{0, 0, 0} {}
 
