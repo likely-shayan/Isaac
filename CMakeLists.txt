@@ -1,24 +1,22 @@
+# Minimum version of CMake required
 cmake_minimum_required(VERSION 3.30)
+
+# Name of project
 project(Isaac)
 
+# Minimum version of C++ required
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(IsaacLib
-  src/vector2d.cpp
-  src/vector3d.cpp
-)
+# Finding and including Eigen library
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
-target_include_directories(IsaacLib
-  PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
-add_executable(Isaac
+# The main executable file
+add_executable("${PROJECT_NAME}"
   src/main.cpp
 )
 
-target_link_libraries(Isaac
-  PRIVATE
-  IsaacLib
+# Linking all the libraries together
+target_link_libraries("${PROJECT_NAME}"
+  Eigen3::Eigen
 )

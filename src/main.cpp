@@ -1,6 +1,4 @@
 #include <iostream>
-#include "vector2d.hpp"
-#include "vector3d.hpp"
 
 int main() {
         
