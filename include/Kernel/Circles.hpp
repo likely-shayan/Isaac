@@ -12,7 +12,7 @@ namespace Isaac
     public:
       Circle() noexcept = default;
 
-      Circle(const Vector2f& position_, const Vector2f& direction_, const float& mass_, const float& radius_);
+      Circle(const Vector2f& position_, const float& mass_, const float& radius_);
 
       Circle(const Circle&& circle_) noexcept;
 

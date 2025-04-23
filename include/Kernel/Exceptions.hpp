@@ -29,6 +29,17 @@ namespace Isaac
       const char* what() const throw() {return message.c_str();}
   };
 
+  class UnknownShapeTypeException : public std::exception
+  {
+    private:
+      std::string message;
+
+    public:
+      UnknownShapeTypeException(const char* description) : message(description) {}
+
+      const char* what() const throw() {return message.c_str();}
+  };
+
 }; // namespace Isaac
 
 #endif // EXCEPTIONS_HPP

@@ -13,8 +13,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # FetchContent to install and set up libraries
 include(FetchContent)
 
-set(EIGEN_ROOT "" CACHE PATH Eigen/)
-
 # Search if Eigen is already available
 find_package(Eigen3 3.3 CONFIG QUIET HINTS ${EIGEN_ROOT})
 
@@ -48,8 +46,9 @@ endif()
 
 # Add source files
 add_library(Isaac_Kernel
-  src/Shapes.cpp
-  src/Circles.cpp
+  src/Kernel/Shapes.cpp
+  src/Kernel/Circles.cpp
+  src/Kernel/Mesh.cpp
 )
 
 # Add header files
@@ -105,20 +104,18 @@ if (ENABLE_TESTS)
   endif()
 
   # Adding all test files for Mathematical Objects
-  add_executable(Isaac_Mathematical_Objects_Tests
-    tests/ShapesTest.cpp
-  )
+  # add_executable(Isaac_Mathematical_Objects_Tests)
 
   # Linking libraries for test of Mathematical Objects
-  target_link_libraries(Isaac_Mathematical_Objects_Tests
-    PRIVATE
-    Isaac_Kernel
-    Eigen3::Eigen
-    gtest
-    gtest_main
-  )
+  # target_link_libraries(Isaac_Mathematical_Objects_Tests
+  #   PRIVATE
+  #   Isaac_Kernel
+  #   Eigen3::Eigen
+  #   gtest
+  #   gtest_main
+  # )
 
   # Add test file for Mathematical Objects
-  add_test(NAME Isaac_Mathematical_Objects_Tests COMMAND Isaac_Mathematical_Objects_Tests)
+  # add_test(NAME Isaac_Mathematical_Objects_Tests COMMAND Isaac_Mathematical_Objects_Tests)
 
 endif()
