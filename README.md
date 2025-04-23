@@ -1,20 +1,19 @@
-<h1 align='center'>Introduction</h1>
+## What is Isaac?
 
-<p align='justify'>
-<b>Isaac</b> is a cross-platform computer software that can be used to create interactive and visually-pleasing simulations of pre-defined physical objects under the effect of various forces that follow the laws of Newtonian mechanics. While the governing laws cannot be changed, we can change the various physical constants in Newtonian mechanics such as acceleration due to gravity or the gravitational constant to see how those system look like under the new conditions. Currently, The focus is on building a prototype that can supports only 2D simulations. 
-</p>
+Isaac is a computer software aimed at making interactive simulations of physical objects under the influence of various forces as per the laws of Newtonian Mechanics. Besides that, Isaac also provides tools for creating customized 2D, 3D shapes and modify physical constants to see how the behaviour of such system changes.
 
-<h2 align='center'>What Isaac is built on:</h2>
-<p align='justify'>
-Isaac uses Eigen library for performing various computations common in linear algebra, numerical integration and other mathematical operations commonly used throughout Newtonian mechanics. For rendering, Isaac uses OpenGL to render all the objects and how they evolve through time in frames. As for GUI, Isaac uses Qt to create the easy-to-use but highly customizable interface to create the simulations.  
-</p>
+## How is Isaac going to be developed?
 
-<h2 align='center'>Our gift to the Open-Source community</h2>
-<p align='justify'>
-Since free and open-source software have helped tremendously in the development of Isaac, We have decided that Isaac is going to be a completely free and open-source software. 
-</p>
+The rendering of Isaac is going to be done using OpenGL. However, In the unfortunate case of poor performance or a higher number of contributors, the rendering will be done by Vulkan for optimal performance.
 
-<h2 align='center'>Future plans</h2>
-<p align='justify'>
-If Isaac is met with lots of love and more contributors, then we will also begin working on more optimized version of Isaac as well as similar software for other domains of physics such as fluid mechanics and electromagnetism along with customized versions of them made specifically for students, teachers and professional researchers.
-</p>
+The GUI of Isaac will be done in Qt to ensure a nice blending with its purely C++ codebase as well as to create Isaac as a cross - platform software.
+
+Finally, Computations related to Linear Algebra and Numerical Methods are going to be done using Eigen. Everything else such as the Shapes objects, Other advanced computation Algorithms (specifically related to integration) are going to be custom - made.
+
+## Is Isaac free?
+
+Since free and open source software are forming the backbone of Isaac, We have decided to ship Isaac as a completely Free and Open Source Project. Open Source enthusiasts and contributors are encouraged to assist in improving Isaac.
+
+## What next?
+
+There are plans for making different version of Isaac suited for different use cases. If Isaac is well appreciated by its targeted users, then we will continue working on customized versions of Isaac for students, teachers and researchers. We also have plans to develop more similar software created specifically for Fluid Dynamics, Electromagnetism and Astrophysics.
