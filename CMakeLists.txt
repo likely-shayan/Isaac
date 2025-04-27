@@ -46,9 +46,7 @@ endif()
 
 # Add source files
 add_library(Isaac_Kernel
-  src/Kernel/Shapes.cpp
-  src/Kernel/Circles.cpp
-  src/Kernel/Mesh.cpp
+  src/Kernel/Curves2D.cpp
 )
 
 # Add header files
