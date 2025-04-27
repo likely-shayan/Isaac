@@ -1,5 +1,6 @@
 add_library(Isaac_Kernel
     Curves2D.cpp
+    Circle2D.cpp
 )
 
 target_include_directories(Isaac_Kernel

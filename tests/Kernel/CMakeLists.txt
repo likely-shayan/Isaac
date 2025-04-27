@@ -17,6 +17,7 @@ message(STATUS "GTest found or fetched.")
 
 add_executable(Isaac_Kernel_Tests
     Curves2DTests.cpp
+    Circle2DTests.cpp
 )
 
 target_include_directories(Isaac_Kernel_Tests
