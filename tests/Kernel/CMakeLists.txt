@@ -16,8 +16,14 @@ endif()
 message(STATUS "GTest found or fetched.")
 
 add_executable(Isaac_Kernel_Tests
-    Curves2DTests.cpp
-    Circle2DTests.cpp
+
+    # 2D Parent and Child Classes 
+    Curve2DTests.cpp
+    CircleTests.cpp
+
+    # 3D Parent and Child Classes
+    Curve3DTests.cpp
+    SphereTests.cpp
 )
 
 target_include_directories(Isaac_Kernel_Tests

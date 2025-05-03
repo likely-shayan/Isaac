@@ -1,5 +1,5 @@
-#ifndef CURVES_2D_HPP_
-#define CURVES_2D_HPP_
+#ifndef CURVE_2D_HPP_
+#define CURVE_2D_HPP_
 
 #include <eigen3/Eigen/Dense>
 
@@ -7,18 +7,18 @@ using Eigen::Vector2d;
 
 namespace Isaac::Kernel {
 
-  enum CurveTypes2D {Circle, };
+  enum CurveType2D {CircleType, };
 
   class Curve2D {
   public:
 
-    Curve2D() noexcept = default;
+    Curve2D() noexcept;
 
-    Curve2D(const CurveTypes2D& curveType_, const Vector2d& position_, const Vector2d& velocity_, const Vector2d& acceleration_) noexcept;
+    Curve2D(const CurveType2D& curveType_, const Vector2d& position_, const Vector2d& velocity_, const Vector2d& acceleration_) noexcept;
 
     Curve2D(const Curve2D& curve_) noexcept;
 
-    CurveTypes2D getCurveType() const noexcept;
+    CurveType2D getCurveType() const noexcept;
 
     Vector2d getPosition() const noexcept;
 
@@ -34,10 +34,10 @@ namespace Isaac::Kernel {
 
   private:
   
-    CurveTypes2D curveType;
+    CurveType2D curveType;
     Vector2d position, velocity, acceleration;
   };
   
 } // namespace Isaac::Kernel
 
-#endif // CURVES_2D_HPP_
+#endif // CURVE_2D_HPP_

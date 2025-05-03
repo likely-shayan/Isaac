@@ -1,13 +1,15 @@
-#include "Kernel/Curves2D.hpp"
+#include "Kernel/Curve2D.hpp"
 
 namespace Isaac::Kernel {
 
-  Curve2D::Curve2D(const CurveTypes2D& curveType_, const Vector2d& position_, const Vector2d& velocity_, const Vector2d& acceleration_) noexcept
+  Curve2D::Curve2D() noexcept = default;
+
+  Curve2D::Curve2D(const CurveType2D& curveType_, const Vector2d& position_, const Vector2d& velocity_, const Vector2d& acceleration_) noexcept
   : curveType(curveType_), position(position_), velocity(velocity_), acceleration(acceleration_) {}
 
   Curve2D::Curve2D(const Curve2D& curve) noexcept : Curve2D(curve.getCurveType(), curve.getPosition(), curve.getVelocity(), curve.getAcceleration()) {}
 
-  CurveTypes2D Curve2D::getCurveType() const noexcept {return curveType;}
+  CurveType2D Curve2D::getCurveType() const noexcept {return curveType;}
 
   Vector2d Curve2D::getPosition() const noexcept {return position;}
 

@@ -1,6 +1,13 @@
 add_library(Isaac_Kernel
-    Curves2D.cpp
-    Circle2D.cpp
+
+    # 2D Parent and Child Classes
+    Curve2D.cpp
+    Circle.cpp
+
+    # 3D Parent and Child Classes
+    Curve3D.cpp
+    Sphere.cpp
+
 )
 
 target_include_directories(Isaac_Kernel

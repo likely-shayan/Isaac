@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 #include <random>
-#include "Kernel/Curves2D.hpp"
+#include "Kernel/Curve2D.hpp"
 
 using namespace Isaac::Kernel;
 
-class Curves2DTests : public ::testing::Test {
+class Curve2DTests : public ::testing::Test {
 protected:
   std::random_device rd;
   std::mt19937 x;
@@ -17,36 +17,36 @@ protected:
   void TearDown() override {}
 };
 
-TEST_F(Curves2DTests, Constructors) {
+TEST_F(Curve2DTests, Constructors) {
   std::normal_distribution f{-1E300, 1E300};
 
-  // CurveTypes2D::Circle
+  // CurveType2D::CircleType
   {
     for (int t = 1; t <= 1'00'000; ++t) {
       Vector2d s = {f(x), f(x)};
       Vector2d v = {f(x), f(x)};
       Vector2d a = {f(x), f(x)};
 
-      Curve2D curve(CurveTypes2D::Circle, s, v, a);
+      Curve2D curve(CurveType2D::CircleType, s, v, a);
 
       Curve2D curve_(curve);
     }
   }
 }
 
-TEST_F(Curves2DTests, Getters) {
+TEST_F(Curve2DTests, Getters) {
   std::normal_distribution f{-1E300, 1E300};
 
-  // CurveTypes2D::Circle
+  // CurveType2D::CircleType
   {
     for (int t = 1; t <= 1'00'000; ++t) {
       Vector2d s = {f(x), f(x)};
       Vector2d v = {f(x), f(x)};
       Vector2d a = {f(x), f(x)};
 
-      Curve2D curve(CurveTypes2D::Circle, s, v, a);
+      Curve2D curve(CurveType2D::CircleType, s, v, a);
 
-      EXPECT_EQ(curve.getCurveType(), CurveTypes2D::Circle);
+      EXPECT_EQ(curve.getCurveType(), CurveType2D::CircleType);
       EXPECT_EQ(curve.getPosition(), s);
       EXPECT_EQ(curve.getVelocity(), v);
       EXPECT_EQ(curve.getAcceleration(), a);
@@ -54,17 +54,17 @@ TEST_F(Curves2DTests, Getters) {
   }
 }
 
-TEST_F(Curves2DTests, Setters) {
+TEST_F(Curve2DTests, Setters) {
   std::normal_distribution f{-1E300, 1E300};
 
-  // CurveTypes2D::Circle
+  // CurveType2D::CircleType
   {
     for (int t = 1; t <= 1'00'000; ++t) {
       Vector2d s = {f(x), f(x)};
       Vector2d v = {f(x), f(x)};
       Vector2d a = {f(x), f(x)};
 
-      Curve2D curve(CurveTypes2D::Circle, s, v, a);
+      Curve2D curve(CurveType2D::CircleType, s, v, a);
 
       Vector2d s_ = {f(x), f(x)};
       Vector2d v_ = {f(x), f(x)};
