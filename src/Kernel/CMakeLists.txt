@@ -1,5 +1,4 @@
 add_library(Isaac_Kernel
-
     # 2D Parent and Child Classes
     Curve2D.cpp
     Circle.cpp
@@ -7,7 +6,6 @@ add_library(Isaac_Kernel
     # 3D Parent and Child Classes
     Curve3D.cpp
     Sphere.cpp
-
 )
 
 target_include_directories(Isaac_Kernel
@@ -27,17 +25,17 @@ else()
     eigen
     GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
     GIT_TAG master
+    GIT_SHALLOW TRUE
+    GIT_PROGRESS  TRUE
   )
   set(EIGEN_BUILD_DOCS OFF CACHE BOOL "" FORCE)
   set(EIGEN_BUILD_TESTS OFF CACHE BOOL "" FORCE)
   set(EIGEN_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-  set(EIGEN_INSTALL_DOCS OFF CACHE BOOL "" FORCE)
-  set(EIGEN_INSTALL_EXAMPLES OFF CACHE BOOL "" FORCE)
   FetchContent_MakeAvailable(eigen)
-set(EIGEN_FOUND FALSE)
+  set(EIGEN_FOUND FALSE)
 endif()
 
 target_link_libraries(Isaac_Kernel
-    PUBLIC
-    Eigen3::Eigen
+  PUBLIC
+  Eigen3::Eigen
 )
