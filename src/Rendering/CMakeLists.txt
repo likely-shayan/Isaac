@@ -1,5 +1,5 @@
 add_library(Isaac_Rendering
-  example.cpp
+  Window.cpp
 )
 
 
