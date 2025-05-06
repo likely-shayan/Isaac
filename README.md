@@ -1,8 +1,19 @@
-In this branch, We will be working on creating a working prototype of Isaac that can render basic
-2-D structures under the set up conditions of various forces, collision and laws of Newtonian Mechanics.
-We will be strictly following Test-Driven Development (TDD).
-We will begin our work by first creating a Kernel of Isaac exclusively for 2-D objects along with
-their simple tests.
-Since performance is critical, We will put maximum efforts in reducing
-boilerplate code and including only what's necessary and keeping it straightforward.
-Every Layer of Isaac (Kernel, Rendering and GUI) will have it's own dedicated folder in include/,  src/ and test/ along with a dedicated CMakeLists.txt. 
+## What is Isaac?
+
+Isaac is a computer software aimed at making interactive simulations of physical objects under the influence of various forces as per the laws of Newtonian Mechanics. Besides that, Isaac also provides tools for creating customized 2D, 3D shapes and modify physical constants to see how the behaviour of such system changes.
+
+## How is Isaac going to be developed?
+
+The rendering of Isaac is going to be done using OpenGL. However, In the unfortunate case of poor performance or a higher number of contributors, the rendering will be done by Vulkan for optimal performance.
+
+The GUI of Isaac will be done in Qt to ensure a nice blending with its purely C++ codebase as well as to create Isaac as a cross - platform software.
+
+Finally, Computations related to Linear Algebra and Numerical Methods are going to be done using Eigen. Everything else such as the Shapes objects, Other advanced computation Algorithms (specifically related to integration) are going to be custom - made.
+
+## Is Isaac free?
+
+Since free and open source software are forming the backbone of Isaac, We have decided to ship Isaac as a completely Free and Open Source Project. Open Source enthusiasts and contributors are encouraged to assist in improving Isaac.
+
+## What next?
+
+There are plans for making different version of Isaac suited for different use cases. If Isaac is well appreciated by its targeted users, then we will continue working on customized versions of Isaac for students, teachers and researchers. We also have plans to develop more similar software created specifically for Fluid Dynamics, Electromagnetism and Astrophysics.
