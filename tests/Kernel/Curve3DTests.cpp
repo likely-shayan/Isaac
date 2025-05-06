@@ -2,7 +2,8 @@
 #include <random>
 #include "Kernel/Curve3D.hpp"
 
-using namespace Isaac::Kernel;
+using Isaac::Kernel::Curve3D;
+using Isaac::Kernel::CurveType3D;
 
 class Curve3DTests : public ::testing::Test {
 protected:

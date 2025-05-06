@@ -2,7 +2,7 @@
 #include <random>
 #include "Kernel/Circle.hpp"
 
-using namespace Isaac::Kernel;
+using Isaac::Kernel::Circle;
 
 class CircleTests : public ::testing::Test {
 protected:

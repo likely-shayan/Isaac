@@ -2,7 +2,7 @@
 #include <random>
 #include "Kernel/Sphere.hpp"
 
-using namespace Isaac::Kernel;
+using Isaac::Kernel::Sphere;
 
 class SphereTests : public ::testing::Test {
 protected:

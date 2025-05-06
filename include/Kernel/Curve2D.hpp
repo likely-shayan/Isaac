@@ -7,7 +7,7 @@ using Eigen::Vector2d;
 
 namespace Isaac::Kernel {
 
-  enum CurveType2D {CircleType, };
+  enum CurveType2D {CircleType, PolygonType};
 
   class Curve2D {
   public:
