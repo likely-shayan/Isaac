@@ -12,7 +12,7 @@ namespace Isaac::Kernel
     
     Polygon() noexcept;
 
-    Polygon(int vertexCount_, std::vector<Vector2d> vertices_, const Vector2d& position_, const Vector2d& velocity_, const Vector2d& acceleration_) noexcept;
+    Polygon(const int& vertexCount_, const std::vector<Vector2d>& vertices_, const Vector2d& position_, const Vector2d& velocity_, const Vector2d& acceleration_) noexcept;
 
     Polygon(const Polygon& polygon_) noexcept;
 
@@ -20,7 +20,11 @@ namespace Isaac::Kernel
 
     Vector2d getVertex(const int& n) const noexcept;
 
+    void setVertex(const int& n, const Vector2d& newVertex) noexcept;
+
     std::vector<Vector2d> getVertices() const noexcept;
+
+    void setVertices(const std::vector<Vector2d>& newVertices) noexcept;
 
   private:
     
