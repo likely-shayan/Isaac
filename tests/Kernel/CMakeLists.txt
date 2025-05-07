@@ -23,6 +23,7 @@ add_executable(Isaac_Kernel_Tests
     Curve2DTests.cpp
     CircleTests.cpp
     PolygonTests.cpp
+    RigidBody2DTests.cpp
 
     # 3D Parent and Child Classes
     Curve3DTests.cpp

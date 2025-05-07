@@ -1,6 +1,6 @@
+#include "Kernel/Curve3D.hpp"
 #include <gtest/gtest.h>
 #include <random>
-#include "Kernel/Curve3D.hpp"
 
 using Isaac::Kernel::Curve3D;
 using Isaac::Kernel::CurveType3D;

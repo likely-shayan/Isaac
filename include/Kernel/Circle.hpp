@@ -14,7 +14,7 @@ namespace Isaac::Kernel {
 
     Circle(const Circle& circle_) noexcept;
 
-    double getRadius() noexcept;
+    double getRadius() const noexcept;
 
   private:
     

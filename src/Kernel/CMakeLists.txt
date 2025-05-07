@@ -3,6 +3,7 @@ add_library(Isaac_Kernel
     Curve2D.cpp
     Circle.cpp
     Polygon.cpp
+    RigidBody2D.cpp
 
     # 3D Parent and Child Classes
     Curve3D.cpp

@@ -1,6 +1,6 @@
+#include "Kernel/Circle.hpp"
 #include <gtest/gtest.h>
 #include <random>
-#include "Kernel/Circle.hpp"
 
 using Isaac::Kernel::Circle;
 

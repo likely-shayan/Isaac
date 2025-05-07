@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
-#include <vector>
-#include <random>
 #include "Kernel/Polygon.hpp"
+#include <gtest/gtest.h>
+#include <random>
+#include <vector>
 
 using Isaac::Kernel::Polygon;
 
@@ -26,7 +26,7 @@ TEST_F(PolygonTests, Constructor) {
     int vertexCount = RNG(x);
 
     std::vector<Vector2d> vertices(vertexCount);
-    for (auto& vertex : vertices) { vertex = {f(x), f(x)}; }
+    for (auto &vertex : vertices) { vertex = {f(x), f(x)}; }
 
     Vector2d s = {f(x), f(x)};
     Vector2d v = {f(x), f(x)};
@@ -46,7 +46,7 @@ TEST_F(PolygonTests, Getters) {
     int vertexCount = RNG(x);
 
     std::vector<Vector2d> vertices(vertexCount);
-    for (auto& vertex : vertices) { vertex = {f(x), f(x)}; }
+    for (auto &vertex : vertices) { vertex = {f(x), f(x)}; }
 
     Vector2d s = {f(x), f(x)};
     Vector2d v = {f(x), f(x)};
@@ -55,7 +55,9 @@ TEST_F(PolygonTests, Getters) {
     Polygon polygon(vertexCount, vertices, s, v, a);
 
     EXPECT_EQ(polygon.getVertexCount(), vertexCount);
-    for (int i = 0; i < vertexCount; ++i) { EXPECT_EQ(polygon.getVertex(i), vertices[i]); }
+    for (int i = 0; i < vertexCount; ++i) {
+      EXPECT_EQ(polygon.getVertex(i), vertices[i]);
+    }
   }
 }
 
@@ -67,7 +69,7 @@ TEST_F(PolygonTests, Setters) {
     int vertexCount = RNG(x);
 
     std::vector<Vector2d> vertices(vertexCount);
-    for (auto& vertex : vertices) { vertex = {f(x), f(x)}; }
+    for (auto &vertex : vertices) { vertex = {f(x), f(x)}; }
 
     Vector2d s = {f(x), f(x)};
     Vector2d v = {f(x), f(x)};
@@ -82,10 +84,12 @@ TEST_F(PolygonTests, Setters) {
     }
 
     std::vector<Vector2d> newVertices(vertexCount);
-    for (auto& vertex : newVertices) { vertex = {f(x), f(x)}; }
+    for (auto &vertex : newVertices) { vertex = {f(x), f(x)}; }
 
     polygon.setVertices(newVertices);
 
-    for (int i = 0; i < vertexCount; ++i) { EXPECT_EQ(polygon.getVertex(i), newVertices[i]); }
+    for (int i = 0; i < vertexCount; ++i) {
+      EXPECT_EQ(polygon.getVertex(i), newVertices[i]);
+    }
   }
 }

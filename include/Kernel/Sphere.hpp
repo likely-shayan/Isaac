@@ -15,7 +15,7 @@ namespace Isaac::Kernel
 
     Sphere(const Sphere& circle_) noexcept;
 
-    double getRadius() noexcept;
+    double getRadius() const noexcept;
 
   private:
     

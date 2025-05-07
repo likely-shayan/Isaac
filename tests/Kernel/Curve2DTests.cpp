@@ -1,6 +1,6 @@
+#include "Kernel/Curve2D.hpp"
 #include <gtest/gtest.h>
 #include <random>
-#include "Kernel/Curve2D.hpp"
 
 using Isaac::Kernel::Curve2D;
 using Isaac::Kernel::CurveType2D;
@@ -37,7 +37,6 @@ TEST_F(Curve2DTests, Constructors) {
   // CurveType2D::PolygonType
   {
     for (int t = 1; t <= 1'00'000; ++t) {
-
       Vector2d s = {f(x), f(x)};
       Vector2d v = {f(x), f(x)};
       Vector2d a = {f(x), f(x)};

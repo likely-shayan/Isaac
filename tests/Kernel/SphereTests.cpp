@@ -1,6 +1,6 @@
+#include "Kernel/Sphere.hpp"
 #include <gtest/gtest.h>
 #include <random>
-#include "Kernel/Sphere.hpp"
 
 using Isaac::Kernel::Sphere;
 
