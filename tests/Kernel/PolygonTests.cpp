@@ -24,19 +24,19 @@ protected:
 
 TEST_F(PolygonTests, Constructor)
 {
-    std::normal_distribution f{-1E300, 1E300};
+    std::normal_distribution f{-1E38, 1E38};
     std::uniform_int_distribution RNG{3, 100};
 
     for (int t = 1; t <= 1'000; ++t)
     {
         int vertexCount = RNG(x);
 
-        std::vector<Vector2d> vertices(vertexCount);
+        std::vector<Vector2f> vertices(vertexCount);
         for (auto& vertex : vertices) { vertex = {f(x), f(x)}; }
 
-        Vector2d s = {f(x), f(x)};
-        Vector2d v = {f(x), f(x)};
-        Vector2d a = {f(x), f(x)};
+        Vector2f s = {f(x), f(x)};
+        Vector2f v = {f(x), f(x)};
+        Vector2f a = {f(x), f(x)};
 
         Polygon polygon(vertexCount, vertices, s, v, a);
 
@@ -46,19 +46,19 @@ TEST_F(PolygonTests, Constructor)
 
 TEST_F(PolygonTests, Getters)
 {
-    std::normal_distribution f{-1E300, 1E300};
+    std::normal_distribution f{-1E38, 1E38};
     std::uniform_int_distribution RNG{3, 100};
 
     for (int t = 1; t <= 1'000; ++t)
     {
         int vertexCount = RNG(x);
 
-        std::vector<Vector2d> vertices(vertexCount);
+        std::vector<Vector2f> vertices(vertexCount);
         for (auto& vertex : vertices) { vertex = {f(x), f(x)}; }
 
-        Vector2d s = {f(x), f(x)};
-        Vector2d v = {f(x), f(x)};
-        Vector2d a = {f(x), f(x)};
+        Vector2f s = {f(x), f(x)};
+        Vector2f v = {f(x), f(x)};
+        Vector2f a = {f(x), f(x)};
 
         Polygon polygon(vertexCount, vertices, s, v, a);
 
@@ -72,30 +72,30 @@ TEST_F(PolygonTests, Getters)
 
 TEST_F(PolygonTests, Setters)
 {
-    std::normal_distribution f{-1E300, 1E300};
+    std::normal_distribution f{-1E38, 1E38};
     std::uniform_int_distribution RNG{3, 100};
 
     for (int t = 1; t <= 1'000; ++t)
     {
         int vertexCount = RNG(x);
 
-        std::vector<Vector2d> vertices(vertexCount);
+        std::vector<Vector2f> vertices(vertexCount);
         for (auto& vertex : vertices) { vertex = {f(x), f(x)}; }
 
-        Vector2d s = {f(x), f(x)};
-        Vector2d v = {f(x), f(x)};
-        Vector2d a = {f(x), f(x)};
+        Vector2f s = {f(x), f(x)};
+        Vector2f v = {f(x), f(x)};
+        Vector2f a = {f(x), f(x)};
 
         Polygon polygon(vertexCount, vertices, s, v, a);
 
         for (int i = 0; i < vertexCount; ++i)
         {
-            Vector2d newVertex = {f(x), f(x)};
+            Vector2f newVertex = {f(x), f(x)};
             polygon.setVertex(i, newVertex);
             EXPECT_EQ(polygon.getVertex(i), newVertex);
         }
 
-        std::vector<Vector2d> newVertices(vertexCount);
+        std::vector<Vector2f> newVertices(vertexCount);
         for (auto& vertex : newVertices) { vertex = {f(x), f(x)}; }
 
         polygon.setVertices(newVertices);

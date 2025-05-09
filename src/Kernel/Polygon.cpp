@@ -8,10 +8,10 @@ namespace Isaac::Kernel
     }
 
     Polygon::Polygon(const int& vertexCount_,
-                     const std::vector<Vector2d>& vertices_,
-                     const Vector2d& position_,
-                     const Vector2d& velocity_,
-                     const Vector2d& acceleration_) noexcept
+                     const std::vector<Vector2f>& vertices_,
+                     const Vector2f& position_,
+                     const Vector2f& velocity_,
+                     const Vector2f& acceleration_) noexcept
         : position(position_)
           , velocity(velocity_)
           , acceleration(acceleration_)
@@ -29,30 +29,30 @@ namespace Isaac::Kernel
     {
     }
 
-    Vector2d Polygon::getPosition() const noexcept { return position; }
+    Vector2f Polygon::getPosition() const noexcept { return position; }
 
-    void Polygon::setPosition(const Vector2d& newPosition) noexcept { position = newPosition; }
+    void Polygon::setPosition(const Vector2f& newPosition) noexcept { position = newPosition; }
 
-    Vector2d Polygon::getVelocity() const noexcept { return velocity; }
+    Vector2f Polygon::getVelocity() const noexcept { return velocity; }
 
-    void Polygon::setVelocity(const Vector2d& newVelocity) noexcept { velocity = newVelocity; }
+    void Polygon::setVelocity(const Vector2f& newVelocity) noexcept { velocity = newVelocity; }
 
-    Vector2d Polygon::getAcceleration() const noexcept { return acceleration; }
+    Vector2f Polygon::getAcceleration() const noexcept { return acceleration; }
 
-    void Polygon::setAcceleration(const Vector2d& newAcceleration) noexcept { acceleration = newAcceleration; }
+    void Polygon::setAcceleration(const Vector2f& newAcceleration) noexcept { acceleration = newAcceleration; }
 
     int Polygon::getVertexCount() const noexcept { return vertexCount; }
 
-    Vector2d Polygon::getVertex(const int& n) const noexcept { return vertices[n]; }
+    Vector2f Polygon::getVertex(const int& n) const noexcept { return vertices[n]; }
 
-    void Polygon::setVertex(const int& n, const Vector2d& newVertex) noexcept
+    void Polygon::setVertex(const int& n, const Vector2f& newVertex) noexcept
     {
         vertices[n] = newVertex;
     }
 
-    std::vector<Vector2d> Polygon::getVertices() const noexcept { return vertices; }
+    std::vector<Vector2f> Polygon::getVertices() const noexcept { return vertices; }
 
-    void Polygon::setVertices(const std::vector<Vector2d>& newVertices) noexcept
+    void Polygon::setVertices(const std::vector<Vector2f>& newVertices) noexcept
     {
         vertices = newVertices;
     }

@@ -17,31 +17,31 @@ namespace Isaac::Kernel
 
     Polygon RigidBody2D::getPolygon() const noexcept { return polygon; }
 
-    Vector2d RigidBody2D::getPosition() const noexcept { return polygon.getPosition(); }
+    Vector2f RigidBody2D::getPosition() const noexcept { return polygon.getPosition(); }
 
-    void RigidBody2D::setPosition(const Vector2d& newPosition) noexcept { polygon.setPosition(newPosition); }
+    void RigidBody2D::setPosition(const Vector2f& newPosition) noexcept { polygon.setPosition(newPosition); }
 
-    Vector2d RigidBody2D::getVelocity() const noexcept { return polygon.getVelocity(); }
+    Vector2f RigidBody2D::getVelocity() const noexcept { return polygon.getVelocity(); }
 
-    void RigidBody2D::setVelocity(const Vector2d& newVelocity) noexcept { polygon.setVelocity(newVelocity); }
+    void RigidBody2D::setVelocity(const Vector2f& newVelocity) noexcept { polygon.setVelocity(newVelocity); }
 
-    Vector2d RigidBody2D::getAcceleration() const noexcept { return polygon.getAcceleration(); }
+    Vector2f RigidBody2D::getAcceleration() const noexcept { return polygon.getAcceleration(); }
 
-    void RigidBody2D::setAcceleration(const Vector2d& newAcceleration) noexcept
+    void RigidBody2D::setAcceleration(const Vector2f& newAcceleration) noexcept
     {
         polygon.setAcceleration(newAcceleration);
     }
 
     int RigidBody2D::getVertexCount() const noexcept { return polygon.getVertexCount(); }
 
-    Vector2d RigidBody2D::getVertex(const int& n) const noexcept { return polygon.getVertex(n); }
+    Vector2f RigidBody2D::getVertex(const int& n) const noexcept { return polygon.getVertex(n); }
 
-    void RigidBody2D::setVertex(const int& n, const Vector2d& newVertex) noexcept { polygon.setVertex(n, newVertex); }
+    void RigidBody2D::setVertex(const int& n, const Vector2f& newVertex) noexcept { polygon.setVertex(n, newVertex); }
 
-    std::vector<Vector2d> RigidBody2D::getVertices() const noexcept { return polygon.getVertices(); }
+    std::vector<Vector2f> RigidBody2D::getVertices() const noexcept { return polygon.getVertices(); }
 
     void RigidBody2D::setVertices(
-        const std::vector<Vector2d>& newVertices) noexcept { polygon.setVertices(newVertices); }
+        const std::vector<Vector2f>& newVertices) noexcept { polygon.setVertices(newVertices); }
 
     double RigidBody2D::getMass() const noexcept { return mass; }
 } // namespace Isaac::Kernel
