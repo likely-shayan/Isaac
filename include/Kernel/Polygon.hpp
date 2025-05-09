@@ -1,13 +1,15 @@
 #ifndef POLYGON_HPP_
 #define POLYGON_HPP_
 
-#include "Curve2D.hpp"
+#include <eigen3/Eigen/Dense>
 #include <vector>
+
+using Eigen::Vector2d;
 
 namespace Isaac::Kernel
 {
 
-  class Polygon : public Curve2D {
+  class Polygon {
   public:
     
     Polygon() noexcept;
@@ -15,6 +17,18 @@ namespace Isaac::Kernel
     Polygon(const int& vertexCount_, const std::vector<Vector2d>& vertices_, const Vector2d& position_, const Vector2d& velocity_, const Vector2d& acceleration_) noexcept;
 
     Polygon(const Polygon& polygon_) noexcept;
+
+    Vector2d getPosition() const noexcept;
+
+    void setPosition(const Vector2d& newPosition) noexcept;
+
+    Vector2d getVelocity() const noexcept;
+
+    void setVelocity(const Vector2d& newVelocity) noexcept;
+
+    Vector2d getAcceleration() const noexcept;
+
+    void setAcceleration(const Vector2d& newAcceleration) noexcept;
 
     int getVertexCount() const noexcept;
 
@@ -27,9 +41,10 @@ namespace Isaac::Kernel
     void setVertices(const std::vector<Vector2d>& newVertices) noexcept;
 
   private:
-    
+    Vector2d position;
+    Vector2d velocity;
+    Vector2d acceleration;
     int vertexCount;
-
     std::vector<Vector2d> vertices;
   };
   

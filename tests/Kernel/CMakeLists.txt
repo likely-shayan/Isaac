@@ -20,14 +20,10 @@ endif()
 
 add_executable(Isaac_Kernel_Tests
     # 2D Parent and Child Classes 
-    Curve2DTests.cpp
-    CircleTests.cpp
     PolygonTests.cpp
     RigidBody2DTests.cpp
 
     # 3D Parent and Child Classes
-    Curve3DTests.cpp
-    SphereTests.cpp
 )
 
 target_include_directories(Isaac_Kernel_Tests

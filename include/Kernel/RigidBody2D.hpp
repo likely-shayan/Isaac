@@ -1,8 +1,6 @@
-#ifndef RIGID_BODY_2D_H
-#define RIGID_BODY_2D_H
+#ifndef RIGID_BODY_2D_HPP_
+#define RIGID_BODY_2D_HPP_
 
-#include "Curve2D.hpp"
-#include "Circle.hpp"
 #include "Polygon.hpp"
 
 namespace Isaac::Kernel {
@@ -11,17 +9,11 @@ namespace Isaac::Kernel {
       public:
         RigidBody2D() noexcept;
 
-        RigidBody2D(const double& mass_, const Curve2D& curve_) noexcept;
-
-        RigidBody2D(const double& mass_, const Circle& circle_) noexcept;
-
         RigidBody2D(const double& mass_, const Polygon& polygon_) noexcept;
 
         RigidBody2D(const RigidBody2D& rigidBody2D_) noexcept;
 
-        CurveType2D getCurveType() const noexcept;
-
-        Curve2D getCurve() const noexcept;
+        Polygon getPolygon() const noexcept;
 
         Vector2d getPosition() const noexcept;
 
@@ -34,8 +26,6 @@ namespace Isaac::Kernel {
         Vector2d getAcceleration() const noexcept;
 
         void setAcceleration(const Vector2d& newAcceleration) noexcept;
-
-        double getRadius() const noexcept;
 
         int getVertexCount() const noexcept;
 
@@ -51,11 +41,9 @@ namespace Isaac::Kernel {
 
       private:
         double mass;
-        Curve2D curve;
-        Circle circle;
         Polygon polygon;
     };
 
 } // namespace Isaac::Kernel
 
-#endif // RIGID_BODY_2D_H
+#endif // RIGID_BODY_2D_HPP_

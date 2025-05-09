@@ -1,99 +1,47 @@
 #include "Kernel/RigidBody2D.hpp"
 
-#include <Kernel/Circle.hpp>
+namespace Isaac::Kernel
+{
+    RigidBody2D::RigidBody2D() noexcept = default;
 
-namespace Isaac::Kernel {
-RigidBody2D::RigidBody2D() noexcept = default;
+    RigidBody2D::RigidBody2D(const double& mass_, const Polygon& polygon_) noexcept
+        : mass(mass_)
+          , polygon(polygon_)
+    {
+    }
 
-RigidBody2D::RigidBody2D(const double &mass_, const Curve2D &curve_) noexcept
-    : mass(mass_)
-    , curve(curve_) {}
+    RigidBody2D::RigidBody2D(const RigidBody2D& rigidBody2D_) noexcept
+        : RigidBody2D(rigidBody2D_.getMass(), rigidBody2D_.getPolygon())
+    {
+    }
 
-RigidBody2D::RigidBody2D(const double &mass_, const Circle &circle_) noexcept
-    : mass(mass_)
-    , curve(static_cast<Curve2D>(circle_))
-    , circle(circle_) {}
+    Polygon RigidBody2D::getPolygon() const noexcept { return polygon; }
 
-RigidBody2D::RigidBody2D(const double &mass_, const Polygon &polygon_) noexcept
-    : mass(mass_)
-    , curve(static_cast<Curve2D>(polygon_))
-    , polygon(polygon_) {}
+    Vector2d RigidBody2D::getPosition() const noexcept { return polygon.getPosition(); }
 
-RigidBody2D::RigidBody2D(const RigidBody2D &rigidBody2D_) noexcept
-    : RigidBody2D(rigidBody2D_.getMass(), rigidBody2D_.getCurve()) {}
+    void RigidBody2D::setPosition(const Vector2d& newPosition) noexcept { polygon.setPosition(newPosition); }
 
-CurveType2D RigidBody2D::getCurveType() const noexcept {
-  return curve.getCurveType();
-}
+    Vector2d RigidBody2D::getVelocity() const noexcept { return polygon.getVelocity(); }
 
-Curve2D RigidBody2D::getCurve() const noexcept { return curve; }
+    void RigidBody2D::setVelocity(const Vector2d& newVelocity) noexcept { polygon.setVelocity(newVelocity); }
 
-Vector2d RigidBody2D::getPosition() const noexcept {
-  return curve.getPosition();
-}
+    Vector2d RigidBody2D::getAcceleration() const noexcept { return polygon.getAcceleration(); }
 
-void RigidBody2D::setPosition(const Vector2d &newPosition) noexcept {
-  curve.setPosition(newPosition);
-  switch (getCurveType()) {
-  case CircleType:  circle.setPosition(newPosition); break;
-  case PolygonType: polygon.setPosition(newPosition); break;
-  }
-}
+    void RigidBody2D::setAcceleration(const Vector2d& newAcceleration) noexcept
+    {
+        polygon.setAcceleration(newAcceleration);
+    }
 
-Vector2d RigidBody2D::getVelocity() const noexcept {
-  return curve.getVelocity();
-}
+    int RigidBody2D::getVertexCount() const noexcept { return polygon.getVertexCount(); }
 
-void RigidBody2D::setVelocity(const Vector2d &newVelocity) noexcept {
-  curve.setVelocity(newVelocity);
-  switch (getCurveType()) {
-  case CircleType:  circle.setVelocity(newVelocity); break;
-  case PolygonType: polygon.setVelocity(newVelocity); break;
-  }
-}
+    Vector2d RigidBody2D::getVertex(const int& n) const noexcept { return polygon.getVertex(n); }
 
-Vector2d RigidBody2D::getAcceleration() const noexcept {
-  return curve.getAcceleration();
-}
+    void RigidBody2D::setVertex(const int& n, const Vector2d& newVertex) noexcept { polygon.setVertex(n, newVertex); }
 
-void RigidBody2D::setAcceleration(const Vector2d &newAcceleration) noexcept {
-  curve.setAcceleration(newAcceleration);
-  switch (getCurveType()) {
-  case CircleType:  circle.setAcceleration(newAcceleration); break;
-  case PolygonType: polygon.setAcceleration(newAcceleration); break;
-  }
-}
+    std::vector<Vector2d> RigidBody2D::getVertices() const noexcept { return polygon.getVertices(); }
 
-double RigidBody2D::getRadius() const noexcept {
-  if (getCurveType() == CircleType) { return circle.getRadius(); }
-  return NULL;
-}
+    void RigidBody2D::setVertices(
+        const std::vector<Vector2d>& newVertices) noexcept { polygon.setVertices(newVertices); }
 
-int RigidBody2D::getVertexCount() const noexcept {
-  if (getCurveType() == PolygonType) { return polygon.getVertexCount(); }
-  return NULL;
-}
-
-Vector2d RigidBody2D::getVertex(const int &n) const noexcept {
-  if (getCurveType() == PolygonType) { return polygon.getVertex(n); }
-  return {NULL, NULL};
-}
-
-void RigidBody2D::setVertex(const int &n, const Vector2d &newVertex) noexcept {
-  if (getCurveType() == PolygonType) { polygon.setVertex(n, newVertex); }
-}
-
-std::vector<Vector2d> RigidBody2D::getVertices() const noexcept {
-  if (getCurveType() == PolygonType) { return polygon.getVertices(); }
-  return {
-      {NULL, NULL}
-  };
-}
-
-void RigidBody2D::setVertices(
-    const std::vector<Vector2d> &newVertices) noexcept {
-  if (getCurveType() == PolygonType) { polygon.setVertices(newVertices); }
-}
-
-double RigidBody2D::getMass() const noexcept { return mass; }
+    double RigidBody2D::getMass() const noexcept { return mass; }
 } // namespace Isaac::Kernel
