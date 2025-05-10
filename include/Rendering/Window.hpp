@@ -3,6 +3,9 @@
 
 #include <array>
 #include <string>
+#include <vector>
+
+#include "Renderable_Object_2D.hpp"
 #include "glad/gl.h"
 #include "GLFW/glfw3.h"
 
@@ -14,7 +17,7 @@ namespace Isaac::Rendering
 
     Window();
 
-    Window(const int& width, const int& height, const std::string& windowTitle, const std::array<float, 4>& color);
+    Window(const int& width, const int& height, const std::string& windowTitle, const std::array<float, 4>& color, const std::vector<Renderable_Object_2D>& renderable_Objects);
 
   private:
 

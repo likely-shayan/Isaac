@@ -17,6 +17,16 @@ namespace Isaac::Rendering {
 
       Renderable_Object_2D(const Renderable_Object_2D& renderable_Object_2D_) noexcept;
 
+      Renderable_Object_2D& operator=(const Renderable_Object_2D& other);
+
+      int getVertexCount() const noexcept;
+
+      RigidBody2D getBody() const noexcept;
+
+      int getScreenWidth() const noexcept;
+
+      int getScreenHeight() const noexcept;
+
       std::vector<float> getCoordinates() const noexcept;
 
       std::vector<int> getIndices() const noexcept;

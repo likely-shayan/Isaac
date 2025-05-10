@@ -29,6 +29,35 @@ namespace Isaac::Rendering
         }
     }
 
+    Renderable_Object_2D::Renderable_Object_2D(const Renderable_Object_2D& renderable_Object_2D_) noexcept
+        : Renderable_Object_2D(renderable_Object_2D_.getBody(), renderable_Object_2D_.getColor(),
+                               renderable_Object_2D_.getScreenWidth(), renderable_Object_2D_.getScreenHeight())
+    {
+    }
+
+    Renderable_Object_2D& Renderable_Object_2D::operator=(const Renderable_Object_2D& other)
+    {
+        if (this != &other)
+        {
+            body = other.getBody();
+            color = other.getColor();
+            screen_Width = other.getScreenWidth();
+            screen_Height = other.getScreenHeight();
+
+            Coordinates = other.getCoordinates();
+            indices = other.getIndices();
+        }
+        return *this;
+    }
+
+    int Renderable_Object_2D::getVertexCount() const noexcept { return body.getVertexCount(); }
+
+    RigidBody2D Renderable_Object_2D::getBody() const noexcept { return body; }
+
+    int Renderable_Object_2D::getScreenWidth() const noexcept { return screen_Width; }
+
+    int Renderable_Object_2D::getScreenHeight() const noexcept { return screen_Height; };
+
     std::vector<float> Renderable_Object_2D::getCoordinates() const noexcept { return Coordinates; }
 
     std::vector<int> Renderable_Object_2D::getIndices() const noexcept { return indices; }
