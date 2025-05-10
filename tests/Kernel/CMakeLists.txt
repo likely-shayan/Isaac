@@ -20,8 +20,8 @@ endif()
 
 add_executable(Isaac_Kernel_Tests
     # 2D Parent and Child Classes 
-    PolygonTests.cpp
-    RigidBody2DTests.cpp
+        PolygonTests.cpp
+        RigidBody2DTests.cpp
 
     # 3D Parent and Child Classes
 )

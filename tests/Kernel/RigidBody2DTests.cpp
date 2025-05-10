@@ -14,7 +14,7 @@ protected:
 
     void SetUp() override
     {
-        std::random_device rd{};
+        std::random_device rd;
         rd();
     }
 
