@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.30.5)
 
 project(Isaac)
 
-option(ENABLE_TESTS "Enable building of tests" ON)
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -19,11 +17,3 @@ target_link_libraries(${PROJECT_NAME}
   Isaac_Kernel
   Isaac_Rendering
 )
-
-if (ENABLE_TESTS)
-  enable_testing()
-
-  add_subdirectory(tests/Kernel)
-  add_subdirectory(tests/Rendering)
-  
-endif()

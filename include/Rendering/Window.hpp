@@ -1,34 +1,31 @@
-#ifndef WINDOW_HPP_
-#define WINDOW_HPP_
+#ifndef ISAAC_WINDOW_HPP_
+#define ISAAC_WINDOW_HPP_
 
-#include <array>
-#include <string>
-#include <vector>
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
+#include <Kernel/Constants.hpp>
+#include <Kernel/Mesh.hpp>
 
-#include "Renderable_Object_2D.hpp"
-#include "glad/gl.h"
-#include "GLFW/glfw3.h"
-
-namespace Isaac::Rendering
-{
-
+namespace Isaac {
   class Window {
   public:
+    Window() noexcept;
 
-    Window();
+    explicit Window(Mesh *mesh_) noexcept;
 
-    Window(const int& width, const int& height, const std::string& windowTitle, const std::array<float, 4>& color, const std::vector<Renderable_Object_2D>& renderable_Objects);
+    void Run() const noexcept;
+
+    static std::vector<float> adjustedVertices(const std::vector<double> &vertices) noexcept;
+
+    ~Window() noexcept;
 
   private:
+    static void framebuffer_size_callback(GLFWwindow *window, int width, int height) noexcept;
 
-    static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-    {
-        glViewport(0, 0, width, height);
-    }
-
-    GLFWwindow* window = nullptr;
+    GLFWwindow *window = nullptr;
+    Mesh *mesh;
+    std::vector<unsigned int> shaderPrograms;
   };
-  
-} // namespace Isaac::Rendering
+} // namespace Isaac
 
-#endif // WINDOW_HPP_
+#endif // ISAAC_WINDOW_HPP_

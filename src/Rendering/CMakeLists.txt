@@ -1,8 +1,6 @@
 add_library(Isaac_Rendering
   Window.cpp
-        Renderable_Object_2D.cpp
 )
-
 
 target_include_directories(Isaac_Rendering
     PUBLIC

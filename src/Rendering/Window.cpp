@@ -1,135 +1,145 @@
-#include "Rendering/Window.hpp"
+#include <algorithm>
 #include <iostream>
+#include <chrono>
+#include <thread>
+#include <Kernel/Constants.hpp>
+#include <Rendering/Window.hpp>
 
-namespace Isaac::Rendering
-{
-    Window::Window() = default;
+namespace Isaac {
+  Window::Window() noexcept {
+    window = nullptr;
+    mesh = nullptr;
+  }
 
-    Window::Window(const int& width,
-                   const int& height,
-                   const std::string& windowTitle,
-                   const std::array<float, 4>& color,
-                   const std::vector<Renderable_Object_2D>& renderable_Objects
-    )
-    {
-        glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  Window::Window(Mesh *mesh_) noexcept {
+    mesh = mesh_;
 
-        const int n = renderable_Objects.size();
+    const std::size_t n = mesh->getSize();
 
-        const char* vertexShaderSource = "#version 330 core\n"
-            "layout (location = 0) in vec3 aPos;\n"
-            "void main()\n"
-            "{\n"
-            "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-            "}\0";
-        std::vector<std::string> fragmentShaderSources(n);
-        for (int i = 0; i < n; i++)
-        {
-            std::vector<float> C = renderable_Objects[i].getColor();
-            fragmentShaderSources[i] = "#version 330 core\n"
-                "out vec4 FragColor;\n"
-                "void main()\n"
-                "{\n"
-                "   FragColor = vec4(" + std::to_string(C[0]) + "f, " + std::to_string(C[1]) + "f, " +
-                std::to_string(C[2]) + "f, " + std::to_string(C[3]) + "f);\n"
-                "}\n\0";
-        }
+    const char *vertexShaderSource = "#version 330 core\n"
+        "layout (location = 0) in vec3 aPos;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+        "}\0";
 
-        window = glfwCreateWindow(width, height, windowTitle.c_str(), NULL, NULL);
+    auto getFragmentShaderSource = [this](const int &i) -> std::string {
+      auto [A, B, C, D] = mesh->getBody(i)->getColor();
+      const std::string FragColor = std::to_string(A) + "f, " + std::to_string(B) + "f, " + std::to_string(C) + "f, " +
+                                    std::to_string(D) + "f";
+      const std::string fragmentShaderSource = "#version 330 core\n"
+                                               "out vec4 FragColor;\n"
+                                               "void main()\n"
+                                               "{\n"
+                                               "   FragColor = vec4(" + FragColor + ");\n"
+                                               "}\n\0";
+      return fragmentShaderSource;
+    };
 
-        if (window == NULL)
-        {
-            std::cerr << "Failed to create GLFW window" << std::endl;
-            glfwTerminate();
-            return;
-        }
-        glfwMakeContextCurrent(window);
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
 
-        glfwSetFramebufferSizeCallback(window, this->framebuffer_size_callback);
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 
-        if (!gladLoadGL(glfwGetProcAddress))
-        {
-            std::cerr << "Failed to initialize GLAD" << std::endl;
-            return;
-        }
-
-        unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-        glCompileShader(vertexShader);
-
-        std::vector<unsigned int> fragmentShaders(n);
-        for (int i = 0; i < n; i++)
-        {
-            fragmentShaders[i] = glCreateShader(GL_FRAGMENT_SHADER);
-            const char* constFragmentShaderSource = fragmentShaderSources[i].c_str();
-            glShaderSource(fragmentShaders[i], 1, &constFragmentShaderSource, NULL);
-            glCompileShader(fragmentShaders[i]);
-        }
-
-        std::vector<unsigned int> shaderPrograms(n);
-        for (int i = 0; i < n; i++)
-        {
-            shaderPrograms[i] = glCreateProgram();
-            glAttachShader(shaderPrograms[i], vertexShader);
-            glAttachShader(shaderPrograms[i], fragmentShaders[i]);
-            glLinkProgram(shaderPrograms[i]);
-        }
-
-        unsigned int VBOs[n], VAOs[n];
-        glGenVertexArrays(n, VAOs);
-        glGenBuffers(n, VBOs);
-
-        std::vector<int> vertexCounts(n);
-
-        for (int i = 0; i < n; i++)
-        {
-            const std::vector<float>& coordinates = renderable_Objects[i].getCoordinates();
-            int totalFloats = coordinates.size();
-
-            vertexCounts[i] = totalFloats / 3;
-
-            glBindVertexArray(VAOs[i]);
-            glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
-
-            glBufferData(GL_ARRAY_BUFFER, sizeof(float) * totalFloats, coordinates.data(), GL_STATIC_DRAW);
-
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-            glEnableVertexAttribArray(0);
-        }
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
-
-        while (!glfwWindowShouldClose(window))
-        {
-            glClearColor(color[0], color[1], color[2], color[3]);
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            for (int i = 0; i < n; i++)
-            {
-                glUseProgram(shaderPrograms[i]);
-
-                glBindVertexArray(VAOs[i]);
-
-                glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCounts[i]);
-            }
-
-            glfwSwapBuffers(window);
-            glfwPollEvents();
-        }
-
-        glDeleteVertexArrays(n, VAOs);
-        glDeleteBuffers(n, VBOs);
-        for (int i = 0; i < n; i++)
-        {
-            glDeleteProgram(shaderPrograms[i]);
-            glDeleteShader(fragmentShaders[i]);
-        }
-        glDeleteShader(vertexShader);
-
-        glfwTerminate();
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "", nullptr, nullptr);
+    if (window == nullptr) {
+      std::cerr << "Failed to create GLFW window" << std::endl;
+      glfwTerminate();
+      std::exit(EXIT_FAILURE);
     }
-} // namespace Isaac::Rendering
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    if (!gladLoadGL(glfwGetProcAddress)) {
+      std::cerr << "Failed to initialize GLAD" << std::endl;
+      glfwTerminate();
+      std::exit(EXIT_FAILURE);
+    }
+
+    const unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    const std::vector<unsigned int> fragmentShader(n, glCreateShader(GL_FRAGMENT_SHADER));
+    shaderPrograms.resize(n);
+    for (unsigned int &shader: shaderPrograms) { shader = glCreateProgram(); }
+
+    glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
+    glCompileShader(vertexShader);
+    for (std::size_t i = 0; i < n; ++i) {
+      const std::string fragmentShaderSourceStr = getFragmentShaderSource(i);
+      const char *fragmentShaderSource = fragmentShaderSourceStr.c_str();
+      glShaderSource(fragmentShader[i], 1, &fragmentShaderSource, nullptr);
+      glCompileShader(fragmentShader[i]);
+      glAttachShader(shaderPrograms[i], vertexShader);
+      glAttachShader(shaderPrograms[i], fragmentShader[i]);
+      glLinkProgram(shaderPrograms[i]);
+    }
+  }
+
+  void Window::Run() const noexcept {
+    const std::size_t n = mesh->getSize();
+
+    unsigned int VBOs[n], VAOs[n];
+    glGenVertexArrays(n, VAOs);
+    glGenBuffers(n, VBOs);
+
+    for (std::size_t i = 0; i < n; ++i) {
+      std::vector<float> polygonVertices = adjustedVertices(mesh->getVertices(i));
+
+      glBindVertexArray(VAOs[i]);
+      glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
+      glBufferData(GL_ARRAY_BUFFER, sizeof(float) * polygonVertices.size(), polygonVertices.data(), GL_STATIC_DRAW);
+      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+      glEnableVertexAttribArray(0);
+    }
+
+    while (!glfwWindowShouldClose(window)) {
+      glClearColor(BACKGROUND_COLOUR);
+      glClear(GL_COLOR_BUFFER_BIT);
+
+      mesh->updateBodies();
+
+      for (std::size_t i = 0; i < n; ++i) {
+        const unsigned int vertexCount = mesh->getBody(i)->getVertexCount();
+        glUseProgram(shaderPrograms[i]);
+        glBindVertexArray(VAOs[i]);
+        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+      }
+
+      glfwSwapBuffers(window);
+      glfwPollEvents();
+    }
+
+    glDeleteVertexArrays(n, VAOs);
+    glDeleteBuffers(n, VBOs);
+    for (const unsigned int &shader: shaderPrograms) {
+      glDeleteProgram(shader);
+    }
+  }
+
+  std::vector<float> Window::adjustedVertices(const std::vector<double> &vertices) noexcept {
+    const std::size_t n = vertices.size();
+    std::vector<float> adjustedVertices(n);
+
+    for (std::size_t i = 0; i < n; i += 3) {
+      adjustedVertices[i] = vertices[i] / WORLD_WIDTH;
+      adjustedVertices[i + 1] = vertices[i + 1] / WORLD_HEIGHT;
+      adjustedVertices[i + 2] = vertices[i + 2] / WORLD_DEPTH;
+    }
+
+    return adjustedVertices;
+  }
+
+  Window::~Window() noexcept {
+    glfwTerminate();
+  }
+
+  void Window::framebuffer_size_callback(GLFWwindow *window, const int width, const int height) noexcept {
+    glViewport(0, 0, width, height);
+  }
+} // namespace Isaac

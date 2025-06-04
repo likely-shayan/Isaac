@@ -1,54 +1,51 @@
-#ifndef POLYGON_HPP_
-#define POLYGON_HPP_
+#ifndef ISAAC_POLYGON_HPP
+#define ISAAC_POLYGON_HPP
 
-#include <eigen3/Eigen/Dense>
+#include <array>
 #include <vector>
+#include <Kernel/Vector.hpp>
 
-using Eigen::Vector2f;
-
-namespace Isaac::Kernel
-{
-
+namespace Isaac {
   class Polygon {
   public:
-    
     Polygon() noexcept;
 
-    Polygon(const int& vertexCount_, const std::vector<Vector2f>& vertices_, const Vector2f& position_, const Vector2f& velocity_, const Vector2f& acceleration_) noexcept;
+    Polygon(const double &mass_, const std::vector<Vector> &vertices_, const Vector &position_, const Vector &velocity_,
+            const Vector &acceleration_, const std::array<float, 4> &Color_) noexcept;
 
-    Polygon(const Polygon& polygon_) noexcept;
+    Polygon(const Polygon &other) noexcept;
 
-    Vector2f getPosition() const noexcept;
+    [[nodiscard]] Vector getVertex(const int &index) const noexcept;
 
-    void setPosition(const Vector2f& newPosition) noexcept;
+    [[nodiscard]] int getVertexCount() const noexcept;
 
-    Vector2f getVelocity() const noexcept;
+    [[nodiscard]] double getMass() const;
 
-    void setVelocity(const Vector2f& newVelocity) noexcept;
+    [[nodiscard]] Vector getPosition() const noexcept;
 
-    Vector2f getAcceleration() const noexcept;
+    void setPosition(const Vector &position_) noexcept;
 
-    void setAcceleration(const Vector2f& newAcceleration) noexcept;
+    [[nodiscard]] Vector getVelocity() const noexcept;
 
-    int getVertexCount() const noexcept;
+    void setVelocity(const Vector &velocity_) noexcept;
 
-    Vector2f getVertex(const int& n) const noexcept;
+    [[nodiscard]] Vector getAcceleration() const noexcept;
 
-    void setVertex(const int& n, const Vector2f& newVertex) noexcept;
+    void setAcceleration(const Vector &acceleration_) noexcept;
 
-    std::vector<Vector2f> getVertices() const noexcept;
+    [[nodiscard]] std::array<float, 4> getColor() const noexcept;
 
-    void setVertices(const std::vector<Vector2f>& newVertices) noexcept;
+    static std::vector<Vector> breakVerticesIntoTriangles(const Vector &center_,
+                                                          const std::vector<Vector> &vertices_) noexcept;
 
   private:
-    Vector2f position;
-    Vector2f velocity;
-    Vector2f acceleration;
-    int vertexCount;
-    std::vector<Vector2f> vertices;
+    double mass;
+    std::vector<Vector> vertices;
+    Vector position;
+    Vector velocity;
+    Vector acceleration;
+    std::array<float, 4> Color;
   };
-  
-} // namespace Isaac::Kernel
+} // namespace Isaac
 
-
-#endif // POLYGON_HPP_
+#endif // ISAAC_POLYGON_HPP
