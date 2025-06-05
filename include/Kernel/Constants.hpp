@@ -5,18 +5,18 @@
 
 #define TIME_STEP 1E-3
 
-#define WORLD_WIDTH 100
+#define WORLD_WIDTH 2000
 
-#define WORLD_HEIGHT 100
+#define WORLD_HEIGHT 2000
 
-#define WORLD_DEPTH 100
+#define WORLD_DEPTH 2000
 
-#define SCREEN_WIDTH 600
+#define SCREEN_WIDTH 1000
 
 #define SCREEN_HEIGHT 600
 
 #define SCREEN_DEPTH 0
 
-#define BACKGROUND_COLOUR 0, 0, 0, 0
+#define BACKGROUND_COLOUR 0.0f, 0.0f, 0.0f, 1.0f
 
 #endif // ISAAC_CONSTANTS_HPP

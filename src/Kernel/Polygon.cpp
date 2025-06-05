@@ -67,11 +67,11 @@ namespace Isaac {
   std::vector<Vector> Polygon::breakVerticesIntoTriangles(const Vector &center_,
                                                           const std::vector<Vector> &vertices_) noexcept {
     const std::size_t n = vertices_.size();
-    std::vector<Vector> vertices(3 * n);
+    std::vector<Vector> vertices;
     for (std::size_t i = 0; i < n; ++i) {
       vertices.push_back(center_);
-      vertices.push_back(vertices_[3 * i % n]);
-      vertices.push_back(vertices_[(3 * i + 1) % n]);
+      vertices.push_back(center_ + vertices_[3 * i % n]);
+      vertices.push_back(center_ + vertices_[(3 * i + 1) % n]);
     }
     return vertices;
   }

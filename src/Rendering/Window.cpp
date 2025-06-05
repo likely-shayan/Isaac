@@ -18,9 +18,12 @@ namespace Isaac {
 
     const char *vertexShaderSource = "#version 330 core\n"
         "layout (location = 0) in vec3 aPos;\n"
+        "\n"
+        "uniform vec3 deltaPos;\n"
+        "\n"
         "void main()\n"
         "{\n"
-        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+        "   gl_Position = vec4(aPos + deltaPos, 1.0);\n"
         "}\0";
 
     auto getFragmentShaderSource = [this](const int &i) -> std::string {
@@ -89,12 +92,9 @@ namespace Isaac {
     glGenBuffers(n, VBOs);
 
     for (std::size_t i = 0; i < n; ++i) {
-      std::vector<float> polygonVertices = adjustedVertices(mesh->getVertices(i));
-
       glBindVertexArray(VAOs[i]);
       glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(float) * polygonVertices.size(), polygonVertices.data(), GL_STATIC_DRAW);
-      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr); // Fixed stride
       glEnableVertexAttribArray(0);
     }
 
@@ -105,16 +105,24 @@ namespace Isaac {
       mesh->updateBodies();
 
       for (std::size_t i = 0; i < n; ++i) {
+        std::vector<float> polygonVertices = adjustedVertices(mesh->getVertices(i));
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * polygonVertices.size(),
+                     polygonVertices.data(), GL_DYNAMIC_DRAW); // Use DYNAMIC_DRAW
+
         const unsigned int vertexCount = mesh->getBody(i)->getVertexCount();
+
         glUseProgram(shaderPrograms[i]);
         glBindVertexArray(VAOs[i]);
+
+        // You can remove the deltaPos uniform since vertex data is updated directly
         glDrawArrays(GL_TRIANGLES, 0, vertexCount);
       }
 
       glfwSwapBuffers(window);
       glfwPollEvents();
     }
-
     glDeleteVertexArrays(n, VAOs);
     glDeleteBuffers(n, VBOs);
     for (const unsigned int &shader: shaderPrograms) {
