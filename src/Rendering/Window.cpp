@@ -1,7 +1,8 @@
-#include <algorithm>
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
 #include <Kernel/Constants.hpp>
 #include <Rendering/Window.hpp>
 
@@ -26,16 +27,19 @@ namespace Isaac {
         "   gl_Position = vec4(aPos + deltaPos, 1.0);\n"
         "}\0";
 
-    auto getFragmentShaderSource = [this](const int &i) -> std::string {
-      auto [A, B, C, D] = mesh->getBody(i)->getColor();
-      const std::string FragColor = std::to_string(A) + "f, " + std::to_string(B) + "f, " + std::to_string(C) + "f, " +
-                                    std::to_string(D) + "f";
+    auto getFragmentShaderSource = [this](const std::size_t &i) -> std::string {
+      const std::vector<float> &color = mesh->getBody(i)->getColor();
+      std::string FragColor;
+      for (const float &val: color) {
+        FragColor += std::to_string(val);
+        FragColor += val == color.back() ? "f" : "f, ";
+      }
       const std::string fragmentShaderSource = "#version 330 core\n"
                                                "out vec4 FragColor;\n"
                                                "void main()\n"
                                                "{\n"
                                                "   FragColor = vec4(" + FragColor + ");\n"
-                                               "}\n\0";
+                                               "}\n";
       return fragmentShaderSource;
     };
 
@@ -85,6 +89,7 @@ namespace Isaac {
   }
 
   void Window::Run() const noexcept {
+    const std::chrono::duration<double, std::milli> oneSecond(1.0 / TIME_STEP);
     const std::size_t n = mesh->getSize();
 
     unsigned int VBOs[n], VAOs[n];
@@ -94,34 +99,46 @@ namespace Isaac {
     for (std::size_t i = 0; i < n; ++i) {
       glBindVertexArray(VAOs[i]);
       glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
-      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr); // Fixed stride
+      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
       glEnableVertexAttribArray(0);
     }
 
     while (!glfwWindowShouldClose(window)) {
-      glClearColor(BACKGROUND_COLOUR);
-      glClear(GL_COLOR_BUFFER_BIT);
-
-      mesh->updateBodies();
-
-      for (std::size_t i = 0; i < n; ++i) {
-        std::vector<float> polygonVertices = adjustedVertices(mesh->getVertices(i));
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * polygonVertices.size(),
-                     polygonVertices.data(), GL_DYNAMIC_DRAW); // Use DYNAMIC_DRAW
-
-        const unsigned int vertexCount = mesh->getBody(i)->getVertexCount();
-
-        glUseProgram(shaderPrograms[i]);
-        glBindVertexArray(VAOs[i]);
-
-        // You can remove the deltaPos uniform since vertex data is updated directly
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+      if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_TRUE) {
+        std::exit(EXIT_SUCCESS);
       }
 
-      glfwSwapBuffers(window);
-      glfwPollEvents();
+      auto start = std::chrono::steady_clock::now();
+
+      for (int j = 0; j < static_cast<int>(1.0 / TIME_STEP); ++j) {
+        glClearColor(BACKGROUND_COLOUR);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        mesh->updateBodies();
+
+        for (std::size_t i = 0; i < n; ++i) {
+          std::vector<float> polygonVertices = adjustedVertices(mesh->getVertices(i));
+
+          glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
+          glBufferData(GL_ARRAY_BUFFER, sizeof(float) * polygonVertices.size(), polygonVertices.data(),
+                       GL_DYNAMIC_DRAW);
+
+          const unsigned int vertexCount = mesh->getBody(i)->getVertexCount();
+
+          glUseProgram(shaderPrograms[i]);
+          glBindVertexArray(VAOs[i]);
+
+          glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+        }
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+      }
+
+      auto end = std::chrono::steady_clock::now();
+      if (std::chrono::duration<double, std::milli> elapsed = end - start; elapsed < oneSecond) {
+        std::this_thread::sleep_for(oneSecond - elapsed);
+      }
     }
     glDeleteVertexArrays(n, VAOs);
     glDeleteBuffers(n, VBOs);

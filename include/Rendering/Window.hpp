@@ -1,9 +1,7 @@
 #ifndef ISAAC_WINDOW_HPP_
 #define ISAAC_WINDOW_HPP_
 
-#include <glad/gl.h>
 #include <GLFW/glfw3.h>
-#include <Kernel/Constants.hpp>
 #include <Kernel/Mesh.hpp>
 
 namespace Isaac {
@@ -22,7 +20,7 @@ namespace Isaac {
   private:
     static void framebuffer_size_callback(GLFWwindow *window, int width, int height) noexcept;
 
-    GLFWwindow *window = nullptr;
+    GLFWwindow *window;
     Mesh *mesh;
     std::vector<unsigned int> shaderPrograms;
   };

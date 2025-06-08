@@ -1,7 +1,6 @@
 #ifndef ISAAC_POLYGON_HPP
 #define ISAAC_POLYGON_HPP
 
-#include <array>
 #include <vector>
 #include <Kernel/Vector.hpp>
 
@@ -11,13 +10,13 @@ namespace Isaac {
     Polygon() noexcept;
 
     Polygon(const double &mass_, const std::vector<Vector> &vertices_, const Vector &position_, const Vector &velocity_,
-            const Vector &acceleration_, const std::array<float, 4> &Color_) noexcept;
+            const std::vector<float> &Color_) noexcept;
 
     Polygon(const Polygon &other) noexcept;
 
-    [[nodiscard]] Vector getVertex(const int &index) const noexcept;
+    [[nodiscard]] Vector getVertex(const std::size_t &index) const noexcept;
 
-    [[nodiscard]] int getVertexCount() const noexcept;
+    [[nodiscard]] std::size_t getVertexCount() const noexcept;
 
     [[nodiscard]] double getMass() const;
 
@@ -33,10 +32,12 @@ namespace Isaac {
 
     void setAcceleration(const Vector &acceleration_) noexcept;
 
-    [[nodiscard]] std::array<float, 4> getColor() const noexcept;
+    [[nodiscard]] std::vector<float> getColor() const noexcept;
 
-    static std::vector<Vector> breakVerticesIntoTriangles(const Vector &center_,
-                                                          const std::vector<Vector> &vertices_) noexcept;
+    static std::vector<Vector> breakVerticesIntoTriangles(const std::vector<Vector> &vertices_) noexcept;
+
+    static std::vector<Vector> constructCircleVertices(const double &radius,
+                                                       const std::size_t &totalVertices = 360) noexcept;
 
   private:
     double mass;
@@ -44,7 +45,7 @@ namespace Isaac {
     Vector position;
     Vector velocity;
     Vector acceleration;
-    std::array<float, 4> Color;
+    std::vector<float> Color;
   };
 } // namespace Isaac
 
