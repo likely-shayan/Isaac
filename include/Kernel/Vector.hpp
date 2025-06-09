@@ -43,6 +43,8 @@ namespace Isaac {
 
     [[nodiscard]] Vector normalized() const noexcept;
 
+    [[nodiscard]] static double dot(const Vector &a, const Vector &b) noexcept;
+
     friend std::istream &operator>>(std::istream &is, Vector &vector) noexcept {
       is >> vector.x >> vector.y >> vector.z;
       return is;

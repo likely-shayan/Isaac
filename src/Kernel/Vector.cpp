@@ -85,4 +85,9 @@ namespace Isaac {
   Vector Vector::normalized() const noexcept {
     return {this->x / norm(), this->y / norm(), this->z / norm()};
   }
+
+  double Vector::dot(const Vector &a, const Vector &b) noexcept {
+    return a.getX() * b.getX() + a.getY() * b.getY() + a.getZ() * b.getZ();
+  }
+
 } // namespace Isaac

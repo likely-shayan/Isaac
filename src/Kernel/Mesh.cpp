@@ -49,21 +49,23 @@ namespace Isaac {
 
     const std::unordered_map<std::size_t, std::vector<std::size_t> > collidingBodies = getCollidingBodies();
 
-    std::unordered_map<std::size_t, Vector> netMomentum;
-    std::unordered_map<std::size_t, double> totalMass;
     for (std::size_t i = 0; i < n; ++i) {
       if (!collidingBodies.contains(i)) { continue; }
-      netMomentum[i] = {0, 0, 0};
-      totalMass[i] = 0;
-      for (const std::size_t &j: collidingBodies.at(i)) {
-        netMomentum[i] += polygons[j]->getVelocity() * polygons[j]->getMass();
-        totalMass[i] += polygons[j]->getMass();
-      }
-    }
+      for (const std::size_t& j : collidingBodies.at(i)) {
+        Vector normal = (polygons[j]->getPosition() - polygons[i]->getPosition()).normalized();
 
-    for (std::size_t i = 0; i < n; ++i) {
-      if (!netMomentum.contains(i)) { continue; }
-      polygons[i]->setVelocity(netMomentum.at(i) * ((1.0 - dampingFactor) / totalMass.at(i)));
+        Vector relativeVelocity = polygons[j]->getVelocity() - polygons[i]->getVelocity();
+        const double velocityAlongNormal = Vector::dot(relativeVelocity, normal);
+
+        if (velocityAlongNormal > 0) return;
+
+        double impulseScalar = -(1 + RESTITUTION_COEFFICIENT) * velocityAlongNormal;
+        impulseScalar /= (1.0/polygons[i]->getMass() + 1.0/polygons[j]->getMass());
+
+        Vector impulse = normal * impulseScalar;
+        polygons[i]->setVelocity(polygons[i]->getVelocity() - impulse * (1 / polygons[i]->getMass()));
+        polygons[j]->setVelocity(polygons[j]->getVelocity() + impulse * (1 / polygons[j]->getMass()));
+      }
     }
   }
 
