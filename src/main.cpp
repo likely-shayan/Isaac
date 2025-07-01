@@ -3,5 +3,5 @@
 int main() {
   std::cout << "Isaac built successfully" << std::endl;
 
-  return 0;
+  return EXIT_SUCCESS;
 }

@@ -32,7 +32,7 @@ namespace Isaac {
       std::string FragColor;
       for (const float &val: color) {
         FragColor += std::to_string(val);
-        FragColor += val == color.back() ? "f" : "f, ";
+        FragColor += &val == &color.back() ? "f" : "f, ";
       }
       const std::string fragmentShaderSource = "#version 330 core\n"
                                                "out vec4 FragColor;\n"
