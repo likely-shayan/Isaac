@@ -1,27 +1,94 @@
-#include "Kernel/Polygon.hpp"
+#include <vector>
+#include <cmath>
+#include <Kernel/Polygon.hpp>
+#include <Kernel/Constants.hpp>
 
-namespace Isaac::Kernel
-{
-  
-  Polygon::Polygon() noexcept = default;
-
-  Polygon::Polygon(const int& vertexCount_, const std::vector<Vector2d>& vertices_, const Vector2d& position_, const Vector2d& velocity_, const Vector2d& acceleration_) noexcept 
-  : Curve2D(CurveType2D::PolygonType, position_, velocity_, acceleration_) {
-    vertexCount = vertexCount_;
-    vertices = vertices_;
+namespace Isaac {
+  Polygon::Polygon() noexcept : mass(0) {
   }
 
-  Polygon::Polygon(const Polygon& polygon_) noexcept  
-  : Polygon(polygon_.getVertexCount(), polygon_.getVertices(), polygon_.getPosition(), polygon_.getVelocity(), polygon_.getAcceleration()) {}
+  Polygon::Polygon(const double &mass_, const std::vector<Vector> &vertices_, const Vector &position_,
+                   const Vector &velocity_, const std::vector<float> &Color_) noexcept {
+    mass = mass_;
+    vertices = breakVerticesIntoTriangles(vertices_);
+    position = position_;
+    velocity = velocity_;
+    acceleration = {0, 0, 0};
+    Color = Color_;
+  }
 
-  int Polygon::getVertexCount() const noexcept {return vertexCount;}
+  Polygon::Polygon(const Polygon &other) noexcept {
+    mass = other.mass;
+    vertices = other.vertices;
+    position = other.position;
+    velocity = other.velocity;
+    acceleration = other.acceleration;
+    Color = other.Color;
+  }
 
-  Vector2d Polygon::getVertex(const int& n) const noexcept {return vertices[n];}
+  Vector Polygon::getVertex(const std::size_t &index) const noexcept {
+    return vertices[index] + position;
+  }
 
-  void Polygon::setVertex(const int& n, const Vector2d& newVertex) noexcept {vertices[n] = newVertex;}
+  std::size_t Polygon::getVertexCount() const noexcept {
+    return vertices.size();
+  }
 
-  std::vector<Vector2d> Polygon::getVertices() const noexcept {return vertices;}
+  double Polygon::getMass() const {
+    return mass;
+  }
 
-  void Polygon::setVertices(const std::vector<Vector2d>& newVertices) noexcept {vertices = newVertices;}
+  Vector Polygon::getPosition() const noexcept {
+    return position;
+  }
 
-} // namespace Isaac::Kernel
+  void Polygon::setPosition(const Vector &position_) noexcept {
+    position = position_;
+  }
+
+  Vector Polygon::getVelocity() const noexcept {
+    return velocity;
+  }
+
+  void Polygon::setVelocity(const Vector &velocity_) noexcept {
+    velocity = velocity_;
+  }
+
+  Vector Polygon::getAcceleration() const noexcept {
+    return acceleration;
+  }
+
+  void Polygon::setAcceleration(const Vector &acceleration_) noexcept {
+    acceleration = acceleration_;
+  }
+
+  std::vector<float> Polygon::getColor() const noexcept {
+    return Color;
+  }
+
+  std::vector<Vector> Polygon::breakVerticesIntoTriangles(const std::vector<Vector> &vertices_) noexcept {
+    const std::size_t n = vertices_.size();
+    std::vector<Vector> vertices;
+    vertices.reserve(3 * (n - 1));
+    for (std::size_t i = 0; i < n - 1; ++i) {
+      vertices.emplace_back(0, 0, 0);
+      vertices.emplace_back(vertices_[i]);
+      vertices.emplace_back(vertices_[i + 1]);
+    }
+    return vertices;
+  }
+
+  std::vector<Vector>
+  Polygon::constructCircleVertices(const double &radius, const std::size_t &totalVertices) noexcept {
+    constexpr double aspectRatio = static_cast<double>(SCREEN_WIDTH) / static_cast<double>(SCREEN_HEIGHT);
+    std::vector<Vector> vertices(totalVertices);
+    for (std::size_t i = 0; i < totalVertices; ++i) {
+      if constexpr (aspectRatio > 1.0) {
+        vertices[i] = {radius * std::sin(i * M_PI / 180), (radius * aspectRatio) * std::cos(i * M_PI / 180), 0};
+      } else {
+        vertices[i] = {(radius * aspectRatio) * std::sin(i * M_PI / 180), radius * std::cos(i * M_PI / 180), 0};
+      }
+    }
+    return vertices;
+  }
+} // namespace Isaac

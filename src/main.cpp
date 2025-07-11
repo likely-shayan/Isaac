@@ -1,8 +1,7 @@
 #include <iostream>
 
 int main() {
-    
-    std::cout << "Hello World" << std::endl;
+  std::cout << "Isaac built successfully" << std::endl;
 
-    return 0;
+  return EXIT_SUCCESS;
 }

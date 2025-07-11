@@ -2,7 +2,6 @@ add_library(Isaac_Rendering
   Window.cpp
 )
 
-
 target_include_directories(Isaac_Rendering
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>

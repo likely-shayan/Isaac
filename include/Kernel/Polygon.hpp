@@ -1,39 +1,52 @@
-#ifndef POLYGON_HPP_
-#define POLYGON_HPP_
+#ifndef ISAAC_POLYGON_HPP
+#define ISAAC_POLYGON_HPP
 
-#include "Curve2D.hpp"
 #include <vector>
+#include <Kernel/Vector.hpp>
 
-namespace Isaac::Kernel
-{
-
-  class Polygon : public Curve2D {
+namespace Isaac {
+  class Polygon {
   public:
-    
     Polygon() noexcept;
 
-    Polygon(const int& vertexCount_, const std::vector<Vector2d>& vertices_, const Vector2d& position_, const Vector2d& velocity_, const Vector2d& acceleration_) noexcept;
+    Polygon(const double &mass_, const std::vector<Vector> &vertices_, const Vector &position_, const Vector &velocity_,
+            const std::vector<float> &Color_) noexcept;
 
-    Polygon(const Polygon& polygon_) noexcept;
+    Polygon(const Polygon &other) noexcept;
 
-    int getVertexCount() const noexcept;
+    [[nodiscard]] Vector getVertex(const std::size_t &index) const noexcept;
 
-    Vector2d getVertex(const int& n) const noexcept;
+    [[nodiscard]] std::size_t getVertexCount() const noexcept;
 
-    void setVertex(const int& n, const Vector2d& newVertex) noexcept;
+    [[nodiscard]] double getMass() const;
 
-    std::vector<Vector2d> getVertices() const noexcept;
+    [[nodiscard]] Vector getPosition() const noexcept;
 
-    void setVertices(const std::vector<Vector2d>& newVertices) noexcept;
+    void setPosition(const Vector &position_) noexcept;
+
+    [[nodiscard]] Vector getVelocity() const noexcept;
+
+    void setVelocity(const Vector &velocity_) noexcept;
+
+    [[nodiscard]] Vector getAcceleration() const noexcept;
+
+    void setAcceleration(const Vector &acceleration_) noexcept;
+
+    [[nodiscard]] std::vector<float> getColor() const noexcept;
+
+    static std::vector<Vector> breakVerticesIntoTriangles(const std::vector<Vector> &vertices_) noexcept;
+
+    static std::vector<Vector> constructCircleVertices(const double &radius,
+                                                       const std::size_t &totalVertices = 360) noexcept;
 
   private:
-    
-    int vertexCount;
-
-    std::vector<Vector2d> vertices;
+    double mass;
+    std::vector<Vector> vertices;
+    Vector position;
+    Vector velocity;
+    Vector acceleration;
+    std::vector<float> Color;
   };
-  
-} // namespace Isaac::Kernel
+} // namespace Isaac
 
-
-#endif // POLYGON_HPP_
+#endif // ISAAC_POLYGON_HPP
