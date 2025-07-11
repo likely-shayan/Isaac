@@ -12,8 +12,8 @@ namespace Isaac {
     mesh = nullptr;
   }
 
-  Window::Window(Mesh *mesh_) noexcept {
-    mesh = mesh_;
+  Window::Window(std::unique_ptr<Mesh> mesh_) noexcept {
+    mesh = std::move(mesh_);
 
     const std::size_t n = mesh->getSize();
 
@@ -161,6 +161,7 @@ namespace Isaac {
   }
 
   Window::~Window() noexcept {
+    glfwDestroyWindow(window);
     glfwTerminate();
   }
 

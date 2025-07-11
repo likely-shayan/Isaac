@@ -9,7 +9,7 @@ namespace Isaac {
   public:
     Window() noexcept;
 
-    explicit Window(Mesh *mesh_) noexcept;
+    explicit Window(std::unique_ptr<Mesh> mesh_) noexcept;
 
     void Run() const noexcept;
 
@@ -21,7 +21,7 @@ namespace Isaac {
     static void framebuffer_size_callback(GLFWwindow *window, int width, int height) noexcept;
 
     GLFWwindow *window;
-    Mesh *mesh;
+    std::unique_ptr<Mesh> mesh;
     std::vector<unsigned int> shaderPrograms;
   };
 } // namespace Isaac

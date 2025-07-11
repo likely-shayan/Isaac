@@ -89,5 +89,4 @@ namespace Isaac {
   double Vector::dot(const Vector &a, const Vector &b) noexcept {
     return a.getX() * b.getX() + a.getY() * b.getY() + a.getZ() * b.getZ();
   }
-
 } // namespace Isaac

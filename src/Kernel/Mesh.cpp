@@ -8,11 +8,11 @@
 namespace Isaac {
   Mesh::Mesh() noexcept = default;
 
-  Mesh::Mesh(const std::vector<Polygon *> &polygons_) noexcept {
+  Mesh::Mesh(const std::vector<std::shared_ptr<Polygon> > &polygons_) noexcept {
     polygons = polygons_;
   }
 
-  Polygon *Mesh::getBody(const std::size_t &index) const noexcept {
+  std::shared_ptr<Polygon> Mesh::getBody(const std::size_t &index) const noexcept {
     return polygons[index];
   }
 
@@ -51,7 +51,7 @@ namespace Isaac {
 
     for (std::size_t i = 0; i < n; ++i) {
       if (!collidingBodies.contains(i)) { continue; }
-      for (const std::size_t& j : collidingBodies.at(i)) {
+      for (const std::size_t &j: collidingBodies.at(i)) {
         Vector normal = (polygons[j]->getPosition() - polygons[i]->getPosition()).normalized();
 
         Vector relativeVelocity = polygons[j]->getVelocity() - polygons[i]->getVelocity();
@@ -60,7 +60,7 @@ namespace Isaac {
         if (velocityAlongNormal > 0) return;
 
         double impulseScalar = -(1 + RESTITUTION_COEFFICIENT) * velocityAlongNormal;
-        impulseScalar /= (1.0/polygons[i]->getMass() + 1.0/polygons[j]->getMass());
+        impulseScalar /= (1.0 / polygons[i]->getMass() + 1.0 / polygons[j]->getMass());
 
         Vector impulse = normal * impulseScalar;
         polygons[i]->setVelocity(polygons[i]->getVelocity() - impulse * (1 / polygons[i]->getMass()));

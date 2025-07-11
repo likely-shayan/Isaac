@@ -1,6 +1,7 @@
 #ifndef ISAAC_MESH_HPP
 #define ISAAC_MESH_HPP
 
+#include <memory>
 #include <vector>
 #include <unordered_map>
 #include <Kernel/Vector.hpp>
@@ -11,9 +12,9 @@ namespace Isaac {
   public:
     Mesh() noexcept;
 
-    explicit Mesh(const std::vector<Polygon *> &polygons_) noexcept;
+    explicit Mesh(const std::vector<std::shared_ptr<Polygon> > &polygons_) noexcept;
 
-    [[nodiscard]] Polygon *getBody(const std::size_t &index) const noexcept;
+    [[nodiscard]] std::shared_ptr<Polygon> getBody(const std::size_t &index) const noexcept;
 
     [[nodiscard]] std::vector<double> getVertices(const std::size_t &index) const noexcept;
 
@@ -27,7 +28,7 @@ namespace Isaac {
 
   private:
     double dampingFactor = 0.0;
-    std::vector<Polygon *> polygons;
+    std::vector<std::shared_ptr<Polygon> > polygons;
   };
 } // namespace Isaac
 
