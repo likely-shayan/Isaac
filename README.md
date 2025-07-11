@@ -1,3 +1,5 @@
+[![Build](https://github.com/likely-shayan/Isaac/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main&event=push)](https://github.com/likely-shayan/Isaac/actions/workflows/cmake-multi-platform.yml)
+
 ## What is Isaac?
 
 Isaac is a computer software aimed at making interactive simulations of physical objects under the influence of various forces as per the laws of Newtonian Mechanics. Besides that, Isaac also provides tools for creating customized 2D, 3D shapes and modify physical constants to see how the behaviour of such system changes.
