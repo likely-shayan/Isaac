@@ -1,6 +1,5 @@
 #include <vector>
 #include <cmath>
-#include <numeric>
 #include <Kernel/Polygon.hpp>
 #include <Kernel/Constants.hpp>
 
@@ -85,9 +84,9 @@ namespace Isaac {
     std::vector<Vector> vertices(totalVertices);
     for (std::size_t i = 0; i < totalVertices; ++i) {
       if constexpr (aspectRatio > 1.0) {
-        vertices[i] = {radius * std::sin(i * std::numbers::pi / 180), (radius * aspectRatio) * std::cos(i * std::numbers::pi / 180), 0};
+        vertices[i] = {radius * std::sin(i * M_PI / 180), (radius * aspectRatio) * std::cos(i * M_PI / 180), 0};
       } else {
-        vertices[i] = {(radius * aspectRatio) * std::sin(i * std::numbers::pi / 180), radius * std::cos(i * std::numbers::pi / 180), 0};
+        vertices[i] = {(radius * aspectRatio) * std::sin(i * M_PI / 180), radius * std::cos(i * M_PI / 180), 0};
       }
     }
     return vertices;
