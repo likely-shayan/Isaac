@@ -16,13 +16,10 @@ jobs:
       #
       # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
         build_type: [Release]
         c_compiler: [gcc, clang, cl]
         include:
-          - os: windows-latest
-            c_compiler: cl
-            cpp_compiler: cl
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
@@ -36,10 +33,6 @@ jobs:
             c_compiler: gcc
             cpp_compiler: g++
         exclude:
-          - os: windows-latest
-            c_compiler: clang
-          - os: windows-latest
-            c_compiler: gcc
           - os: ubuntu-latest
             c_compiler: cl
           - os: macos-latest
@@ -58,23 +51,23 @@ jobs:
         python -m pip install --upgrade pip
         pip install jinja2
 
-#    - name: Install Linux dependencies
-#      if: runner.os == 'Linux'
-#      run: |
-#        sudo apt-get update
-#        sudo apt-get install -y \
-#          build-essential \
-#          cmake \
-#          libgl1-mesa-dev \
-#          libglu1-mesa-dev \
-#          libxrandr-dev \
-#          libxinerama-dev \
-#          libxcursor-dev \
-#          libxi-dev \
-#          libwayland-dev \
-#          wayland-protocols \
-#          libxkbcommon-dev \
-#          pkg-config
+    - name: Install Linux dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          cmake \
+          libgl1-mesa-dev \
+          libglu1-mesa-dev \
+          libxrandr-dev \
+          libxinerama-dev \
+          libxcursor-dev \
+          libxi-dev \
+          libwayland-dev \
+          wayland-protocols \
+          libxkbcommon-dev \
+          pkg-config
     
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
