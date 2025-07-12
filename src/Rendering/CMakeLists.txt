@@ -9,8 +9,6 @@ target_include_directories(Isaac_Rendering
 
 include(FetchContent)
 
-find_package(OpenGL REQUIRED)
-
 find_package(glfw 3.4 CONFIG QUIET)
 if (glfw_FOUND)
   message(STATUS "Found glfw3")
@@ -58,5 +56,4 @@ target_link_libraries(Isaac_Rendering
   PUBLIC
   glfw
   glad
-  OpenGL::GL
 )
