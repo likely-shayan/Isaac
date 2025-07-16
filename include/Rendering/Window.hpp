@@ -1,8 +1,10 @@
 #ifndef ISAAC_WINDOW_HPP_
 #define ISAAC_WINDOW_HPP_
 
-#include <GLFW/glfw3.h>
 #include <Kernel/Mesh.hpp>
+#include <Rendering/Shader.hpp>
+
+#include <GLFW/glfw3.h>
 
 namespace Isaac {
   class Window {
@@ -13,7 +15,7 @@ namespace Isaac {
 
     void Run() const noexcept;
 
-    static std::vector<float> adjustedVertices(const std::vector<double> &vertices) noexcept;
+    static std::vector<float> adjustedVertices(const std::vector<float> &vertices) noexcept;
 
     ~Window() noexcept;
 
@@ -22,7 +24,7 @@ namespace Isaac {
 
     GLFWwindow *window;
     std::unique_ptr<Mesh> mesh;
-    std::vector<unsigned int> shaderPrograms;
+    Shader shader;
   };
 } // namespace Isaac
 

@@ -2,10 +2,15 @@
 #define ISAAC_MESH_HPP
 
 #include <memory>
-#include <vector>
 #include <unordered_map>
-#include <Kernel/Vector.hpp>
+#include <vector>
+
+#include <Eigen/Dense>
+
 #include <Kernel/Polygon.hpp>
+
+using Eigen::Vector3d;
+using Eigen::Vector4d;
 
 namespace Isaac {
   class Mesh {
@@ -16,18 +21,17 @@ namespace Isaac {
 
     [[nodiscard]] std::shared_ptr<Polygon> getBody(const std::size_t &index) const noexcept;
 
-    [[nodiscard]] std::vector<double> getVertices(const std::size_t &index) const noexcept;
+    [[nodiscard]] std::vector<float> getVertices(const std::size_t &index) const noexcept;
 
     [[nodiscard]] std::size_t getSize() const noexcept;
 
     void updateBodies() const noexcept;
 
-    [[nodiscard]] std::vector<Vector> getNetGravitationalAcceleration() const noexcept;
+    [[nodiscard]] std::vector<Vector3d> getNetGravitationalAcceleration() const noexcept;
 
     [[nodiscard]] std::unordered_map<std::size_t, std::vector<std::size_t> > getCollidingBodies() const noexcept;
 
   private:
-    double dampingFactor = 0.0;
     std::vector<std::shared_ptr<Polygon> > polygons;
   };
 } // namespace Isaac

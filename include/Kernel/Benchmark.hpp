@@ -1,12 +1,12 @@
 #ifndef BENCHMARK_H
 #define BENCHMARK_H
 
+#include <chrono>
+#include <functional>
 #include <iostream>
 #include <map>
-#include <chrono>
-#include <vector>
 #include <string>
-#include <functional>
+#include <vector>
 
 class Case {
 public:

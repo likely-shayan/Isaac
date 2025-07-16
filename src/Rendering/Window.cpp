@@ -1,10 +1,14 @@
 #include <iostream>
-#include <chrono>
-#include <thread>
+
+#include <Eigen/Dense>
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
+
 #include <Kernel/Constants.hpp>
+#include <Rendering/Shader.hpp>
 #include <Rendering/Window.hpp>
+
+using Eigen::Vector4d;
 
 namespace Isaac {
   Window::Window() noexcept {
@@ -14,34 +18,6 @@ namespace Isaac {
 
   Window::Window(std::unique_ptr<Mesh> mesh_) noexcept {
     mesh = std::move(mesh_);
-
-    const std::size_t n = mesh->getSize();
-
-    const char *vertexShaderSource = "#version 330 core\n"
-        "layout (location = 0) in vec3 aPos;\n"
-        "\n"
-        "uniform vec3 deltaPos;\n"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = vec4(aPos + deltaPos, 1.0);\n"
-        "}\0";
-
-    auto getFragmentShaderSource = [this](const std::size_t &i) -> std::string {
-      const std::vector<float> &color = mesh->getBody(i)->getColor();
-      std::string FragColor;
-      for (const float &val: color) {
-        FragColor += std::to_string(val);
-        FragColor += &val == &color.back() ? "f" : "f, ";
-      }
-      const std::string fragmentShaderSource = "#version 330 core\n"
-                                               "out vec4 FragColor;\n"
-                                               "void main()\n"
-                                               "{\n"
-                                               "   FragColor = vec4(" + FragColor + ");\n"
-                                               "}\n";
-      return fragmentShaderSource;
-    };
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -70,26 +46,10 @@ namespace Isaac {
       std::exit(EXIT_FAILURE);
     }
 
-    const unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    const std::vector<unsigned int> fragmentShader(n, glCreateShader(GL_FRAGMENT_SHADER));
-    shaderPrograms.resize(n);
-    for (unsigned int &shader: shaderPrograms) { shader = glCreateProgram(); }
-
-    glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
-    glCompileShader(vertexShader);
-    for (std::size_t i = 0; i < n; ++i) {
-      const std::string fragmentShaderSourceStr = getFragmentShaderSource(i);
-      const char *fragmentShaderSource = fragmentShaderSourceStr.c_str();
-      glShaderSource(fragmentShader[i], 1, &fragmentShaderSource, nullptr);
-      glCompileShader(fragmentShader[i]);
-      glAttachShader(shaderPrograms[i], vertexShader);
-      glAttachShader(shaderPrograms[i], fragmentShader[i]);
-      glLinkProgram(shaderPrograms[i]);
-    }
+    shader = Shader("src/Rendering/VertexShader.vert", "src/Rendering/FragmentShader.frag");
   }
 
   void Window::Run() const noexcept {
-    const std::chrono::duration<double, std::milli> oneSecond(1.0 / TIME_STEP);
     const std::size_t n = mesh->getSize();
 
     unsigned int VBOs[n], VAOs[n];
@@ -98,9 +58,12 @@ namespace Isaac {
 
     for (std::size_t i = 0; i < n; ++i) {
       glBindVertexArray(VAOs[i]);
+      glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->getBody(i)->getVertexCount(),
+                   adjustedVertices(mesh->getVertices(i)).data(),GL_DYNAMIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
       glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
       glEnableVertexAttribArray(0);
+      glBindVertexArray(VAOs[i]);
     }
 
     while (!glfwWindowShouldClose(window)) {
@@ -108,46 +71,36 @@ namespace Isaac {
         std::exit(EXIT_SUCCESS);
       }
 
-      auto start = std::chrono::steady_clock::now();
+      glClearColor(BACKGROUND_COLOUR);
+      glClear(GL_COLOR_BUFFER_BIT);
 
-      for (int j = 0; j < static_cast<int>(1.0 / TIME_STEP); ++j) {
-        glClearColor(BACKGROUND_COLOUR);
-        glClear(GL_COLOR_BUFFER_BIT);
+      shader.Use();
 
-        mesh->updateBodies();
+      mesh->updateBodies();
 
-        for (std::size_t i = 0; i < n; ++i) {
-          std::vector<float> polygonVertices = adjustedVertices(mesh->getVertices(i));
+      for (std::size_t i = 0; i < n; ++i) {
+        std::vector<float> polygonVertices = adjustedVertices(mesh->getVertices(i));
 
-          glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
-          glBufferData(GL_ARRAY_BUFFER, sizeof(float) * polygonVertices.size(), polygonVertices.data(),
-                       GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * polygonVertices.size(), polygonVertices.data(),
+                     GL_DYNAMIC_DRAW);
 
-          const unsigned int vertexCount = mesh->getBody(i)->getVertexCount();
+        const unsigned int vertexCount = mesh->getBody(i)->getVertexCount();
 
-          glUseProgram(shaderPrograms[i]);
-          glBindVertexArray(VAOs[i]);
+        glBindVertexArray(VAOs[i]);
 
-          glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-        }
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        shader.setVector4("Color", mesh->getBody(i)->getColor());
+        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
       }
 
-      auto end = std::chrono::steady_clock::now();
-      if (std::chrono::duration<double, std::milli> elapsed = end - start; elapsed < oneSecond) {
-        std::this_thread::sleep_for(oneSecond - elapsed);
-      }
+      glfwSwapBuffers(window);
+      glfwPollEvents();
     }
     glDeleteVertexArrays(n, VAOs);
     glDeleteBuffers(n, VBOs);
-    for (const unsigned int &shader: shaderPrograms) {
-      glDeleteProgram(shader);
-    }
   }
 
-  std::vector<float> Window::adjustedVertices(const std::vector<double> &vertices) noexcept {
+  std::vector<float> Window::adjustedVertices(const std::vector<float> &vertices) noexcept {
     const std::size_t n = vertices.size();
     std::vector<float> adjustedVertices(n);
 
