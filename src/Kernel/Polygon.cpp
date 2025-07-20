@@ -34,11 +34,6 @@ namespace Isaac {
     return vertices[index];
   }
 
-  const std::vector<Vector3d> &Polygon::getVertices() const noexcept {
-    return vertices;
-  }
-
-
   std::size_t Polygon::getVertexCount() const noexcept {
     return vertices.size();
   }
@@ -88,15 +83,10 @@ namespace Isaac {
   }
 
   std::vector<Vector3d>
-  Polygon::constructCircleVertices(const float &radius, const std::size_t &totalVertices) noexcept {
-    constexpr double aspectRatio = static_cast<double>(SCREEN_WIDTH) / static_cast<double>(SCREEN_HEIGHT);
+  Polygon::constructCircleVertices(const double &radius, const std::size_t &totalVertices) noexcept {
     std::vector<Vector3d> vertices(totalVertices);
     for (std::size_t i = 0; i < totalVertices; ++i) {
-      if constexpr (aspectRatio > 1.0) {
-        vertices[i] = {radius * std::sin(i * M_PI / 180), (radius * aspectRatio) * std::cos(i * M_PI / 180), 0};
-      } else {
-        vertices[i] = {(radius * aspectRatio) * std::sin(i * M_PI / 180), radius * std::cos(i * M_PI / 180), 0};
-      }
+      vertices[i] = {radius * std::sin(i * M_PI / 180), radius * std::cos(i * M_PI / 180), 0};
     }
     return vertices;
   }

@@ -86,7 +86,7 @@ namespace Isaac {
 
   void Shader::setMatrix4(const std::string &name, const Matrix4d &value) const noexcept {
     Matrix4f floatValue = value.cast<float>();
-    glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, floatValue.data());
+    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, false, floatValue.data());
   }
 
 

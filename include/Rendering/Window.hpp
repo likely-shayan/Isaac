@@ -12,21 +12,25 @@ namespace Isaac {
   public:
     Window() noexcept;
 
-    explicit Window(std::unique_ptr<Mesh> mesh_) noexcept;
+    explicit Window(const std::shared_ptr<Mesh> &mesh_) noexcept;
 
     void Run() noexcept;
-
-    static std::vector<float> adjustedVertices(const std::vector<float> &vertices) noexcept;
 
     ~Window() noexcept;
 
   private:
+    void processInput(GLFWwindow *window) noexcept;
+
     static void framebuffer_size_callback(GLFWwindow *window, int width, int height) noexcept;
 
+    static void mouse_callback(GLFWwindow *window, double xposIn, double yposIn) noexcept;
+
     GLFWwindow *window;
-    std::unique_ptr<Mesh> mesh;
+    std::shared_ptr<Mesh> mesh;
     Shader shader;
     Camera camera;
+    double deltaTime = 0, lastFrame = 0, lastX, lastY;
+    bool firstMouse = true;
   };
 } // namespace Isaac
 

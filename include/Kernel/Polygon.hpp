@@ -21,8 +21,6 @@ namespace Isaac {
 
     [[nodiscard]] Vector3d getVertex(const std::size_t &index) const noexcept;
 
-    [[nodiscard]] const std::vector<Vector3d>& getVertices() const noexcept;
-
     [[nodiscard]] std::size_t getVertexCount() const noexcept;
 
     [[nodiscard]] float getMass() const;
@@ -43,11 +41,11 @@ namespace Isaac {
 
     static std::vector<Vector3d> breakVerticesIntoTriangles(const std::vector<Vector3d> &vertices_) noexcept;
 
-    static std::vector<Vector3d> constructCircleVertices(const float &radius,
+    static std::vector<Vector3d> constructCircleVertices(const double &radius,
                                                          const std::size_t &totalVertices = 360) noexcept;
 
   private:
-    float mass;
+    double mass;
     std::vector<Vector3d> vertices;
     Vector3d position;
     Vector3d velocity;
