@@ -1,47 +1,29 @@
 #include <iostream>
-#include <chrono>
-#include <thread>
+
+#include <Eigen/Dense>
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
+
 #include <Kernel/Constants.hpp>
+#include <Rendering/Shader.hpp>
 #include <Rendering/Window.hpp>
+#include <Rendering/Camera.hpp>
+
+using Eigen::Vector4d;
+using Eigen::Matrix4d;
+using Eigen::Affine3d;
+using Eigen::Translation3d;
 
 namespace Isaac {
   Window::Window() noexcept {
     window = nullptr;
     mesh = nullptr;
+    lastX = SCREEN_WIDTH / 2.0;
+    lastY = SCREEN_HEIGHT / 2.0;
   }
 
-  Window::Window(std::unique_ptr<Mesh> mesh_) noexcept {
-    mesh = std::move(mesh_);
-
-    const std::size_t n = mesh->getSize();
-
-    const char *vertexShaderSource = "#version 330 core\n"
-        "layout (location = 0) in vec3 aPos;\n"
-        "\n"
-        "uniform vec3 deltaPos;\n"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = vec4(aPos + deltaPos, 1.0);\n"
-        "}\0";
-
-    auto getFragmentShaderSource = [this](const std::size_t &i) -> std::string {
-      const std::vector<float> &color = mesh->getBody(i)->getColor();
-      std::string FragColor;
-      for (const float &val: color) {
-        FragColor += std::to_string(val);
-        FragColor += &val == &color.back() ? "f" : "f, ";
-      }
-      const std::string fragmentShaderSource = "#version 330 core\n"
-                                               "out vec4 FragColor;\n"
-                                               "void main()\n"
-                                               "{\n"
-                                               "   FragColor = vec4(" + FragColor + ");\n"
-                                               "}\n";
-      return fragmentShaderSource;
-    };
+  Window::Window(const std::shared_ptr<Mesh> &mesh_) noexcept {
+    mesh = mesh_;
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -49,7 +31,6 @@ namespace Isaac {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -62,7 +43,11 @@ namespace Isaac {
       std::exit(EXIT_FAILURE);
     }
     glfwMakeContextCurrent(window);
+    glfwSetWindowUserPointer(window, this);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (!gladLoadGL(glfwGetProcAddress)) {
       std::cerr << "Failed to initialize GLAD" << std::endl;
@@ -70,26 +55,15 @@ namespace Isaac {
       std::exit(EXIT_FAILURE);
     }
 
-    const unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    const std::vector<unsigned int> fragmentShader(n, glCreateShader(GL_FRAGMENT_SHADER));
-    shaderPrograms.resize(n);
-    for (unsigned int &shader: shaderPrograms) { shader = glCreateProgram(); }
+    glEnable(GL_DEPTH_TEST);
+    camera = Camera({CAMERA_INITIAL_POSITION}, {0, 1, 0}, -90.0, 0.0);
+    shader = Shader("src/Rendering/VertexShader.vert", "src/Rendering/FragmentShader.frag");
 
-    glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
-    glCompileShader(vertexShader);
-    for (std::size_t i = 0; i < n; ++i) {
-      const std::string fragmentShaderSourceStr = getFragmentShaderSource(i);
-      const char *fragmentShaderSource = fragmentShaderSourceStr.c_str();
-      glShaderSource(fragmentShader[i], 1, &fragmentShaderSource, nullptr);
-      glCompileShader(fragmentShader[i]);
-      glAttachShader(shaderPrograms[i], vertexShader);
-      glAttachShader(shaderPrograms[i], fragmentShader[i]);
-      glLinkProgram(shaderPrograms[i]);
-    }
+    lastX = SCREEN_WIDTH / 2.0;
+    lastY = SCREEN_HEIGHT / 2.0;
   }
 
-  void Window::Run() const noexcept {
-    const std::chrono::duration<double, std::milli> oneSecond(1.0 / TIME_STEP);
+  void Window::Run() noexcept {
     const std::size_t n = mesh->getSize();
 
     unsigned int VBOs[n], VAOs[n];
@@ -97,67 +71,66 @@ namespace Isaac {
     glGenBuffers(n, VBOs);
 
     for (std::size_t i = 0; i < n; ++i) {
+      std::vector<float> vertices = mesh->getVertices(i);
+
       glBindVertexArray(VAOs[i]);
       glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
+      glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
       glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
       glEnableVertexAttribArray(0);
     }
 
+    glBindVertexArray(0);
+
     while (!glfwWindowShouldClose(window)) {
-      if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_TRUE) {
-        std::exit(EXIT_SUCCESS);
+      const double currentFrame = glfwGetTime();
+      deltaTime = currentFrame - lastFrame;
+      lastFrame = currentFrame;
+
+      processInput(window);
+
+      glClearColor(BACKGROUND_COLOUR);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+      shader.Use();
+
+      mesh->updateBodies();
+
+      constexpr double fov = CAMERA_FOV;
+      constexpr double aspect = static_cast<double>(SCREEN_WIDTH) / static_cast<double>(SCREEN_HEIGHT);
+      constexpr double near_plane = CAMERA_NEAR;
+      constexpr double far_plane = CAMERA_FAR;
+
+      Matrix4d projection = Matrix4d::Zero();
+      const double f = 1.0 / tan((fov * M_PI / 180.0) / 2.0);
+      projection(0, 0) = f / aspect;
+      projection(1, 1) = f;
+      projection(2, 2) = -(far_plane + near_plane) / (far_plane - near_plane);
+      projection(2, 3) = -(2.0 * far_plane * near_plane) / (far_plane - near_plane);
+      projection(3, 2) = -1.0;
+      Matrix4d view = camera.getViewMatrix();
+
+      shader.setMatrix4("projection", projection);
+      shader.setMatrix4("view", view);
+
+      for (std::size_t i = 0; i < n; ++i) {
+        Vector3d position = mesh->getBody(i)->getPosition();
+        Matrix4d model = Matrix4d::Identity();
+        model(0, 3) = position.x();
+        model(1, 3) = position.y();
+        model(2, 3) = position.z();
+        shader.setMatrix4("model", model);
+        shader.setVector4("Color", mesh->getBody(i)->getColor());
+
+        glBindVertexArray(VAOs[i]);
+        glDrawArrays(GL_TRIANGLES, 0, mesh->getBody(i)->getVertexCount());
       }
 
-      auto start = std::chrono::steady_clock::now();
-
-      for (int j = 0; j < static_cast<int>(1.0 / TIME_STEP); ++j) {
-        glClearColor(BACKGROUND_COLOUR);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        mesh->updateBodies();
-
-        for (std::size_t i = 0; i < n; ++i) {
-          std::vector<float> polygonVertices = adjustedVertices(mesh->getVertices(i));
-
-          glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
-          glBufferData(GL_ARRAY_BUFFER, sizeof(float) * polygonVertices.size(), polygonVertices.data(),
-                       GL_DYNAMIC_DRAW);
-
-          const unsigned int vertexCount = mesh->getBody(i)->getVertexCount();
-
-          glUseProgram(shaderPrograms[i]);
-          glBindVertexArray(VAOs[i]);
-
-          glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-        }
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-      }
-
-      auto end = std::chrono::steady_clock::now();
-      if (std::chrono::duration<double, std::milli> elapsed = end - start; elapsed < oneSecond) {
-        std::this_thread::sleep_for(oneSecond - elapsed);
-      }
+      glfwSwapBuffers(window);
+      glfwPollEvents();
     }
     glDeleteVertexArrays(n, VAOs);
     glDeleteBuffers(n, VBOs);
-    for (const unsigned int &shader: shaderPrograms) {
-      glDeleteProgram(shader);
-    }
-  }
-
-  std::vector<float> Window::adjustedVertices(const std::vector<double> &vertices) noexcept {
-    const std::size_t n = vertices.size();
-    std::vector<float> adjustedVertices(n);
-
-    for (std::size_t i = 0; i < n; i += 3) {
-      adjustedVertices[i] = vertices[i] / WORLD_WIDTH;
-      adjustedVertices[i + 1] = vertices[i + 1] / WORLD_HEIGHT;
-      adjustedVertices[i + 2] = vertices[i + 2] / WORLD_DEPTH;
-    }
-
-    return adjustedVertices;
   }
 
   Window::~Window() noexcept {
@@ -167,5 +140,41 @@ namespace Isaac {
 
   void Window::framebuffer_size_callback(GLFWwindow *window, const int width, const int height) noexcept {
     glViewport(0, 0, width, height);
+  }
+
+  void Window::processInput(GLFWwindow *window) noexcept {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+      glfwSetWindowShouldClose(window, true);
+    }
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+      camera.processKeyboard(Camera::FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+      camera.processKeyboard(Camera::BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+      camera.processKeyboard(Camera::LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+      camera.processKeyboard(Camera::RIGHT, deltaTime);
+  }
+
+  void Window::mouse_callback(GLFWwindow *window, double xposIn, double yposIn) noexcept {
+    auto *instance = static_cast<Window *>(glfwGetWindowUserPointer(window));
+    if (instance == nullptr) return;
+
+    const double xpos = xposIn;
+    const double ypos = yposIn;
+
+    if (instance->firstMouse) {
+      instance->lastX = xpos;
+      instance->lastY = ypos;
+      instance->firstMouse = false;
+    }
+
+    const double xoffset = xpos - instance->lastX;
+    const double yoffset = instance->lastY - ypos;
+
+    instance->lastX = xpos;
+    instance->lastY = ypos;
+
+    instance->camera.processMouseMovement(xoffset, yoffset);
   }
 } // namespace Isaac

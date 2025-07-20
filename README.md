@@ -10,7 +10,7 @@ The rendering of Isaac is going to be done using OpenGL. However, In the unfortu
 
 The GUI of Isaac will be done in imGUI to ensure a nice blending with its purely C++ codebase as well as to create Isaac as a cross - platform software.
 
-Finally, Computations related to Linear Algebra and Numerical Methods are going to be done using a custom library. Everything else such as the Shapes objects, Other advanced computation Algorithms (specifically related to integration) are going to be custom - made.
+Finally, Computations related to Linear Algebra and Numerical Methods are going to be done using Eigen library. Everything else such as the Shapes objects, Other advanced computation Algorithms (specifically related to integration) are going to be custom - made.
 
 However, Since the computations are the only part that can be optimized by us, We are going to be trying out all different libraries and implementation during development as well as after development to find out the most optimized way.
 

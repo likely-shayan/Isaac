@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30.5)
+cmake_minimum_required(VERSION 3.11)
 
 project(Isaac)
 
@@ -13,7 +13,7 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-  PRIVATE
+  PUBLIC
   Isaac_Kernel
   Isaac_Rendering
 )

@@ -1,16 +1,20 @@
-#include <vector>
 #include <cmath>
-#include <Kernel/Polygon.hpp>
+#include <vector>
+
 #include <Kernel/Constants.hpp>
+#include <Kernel/Polygon.hpp>
+
+using Eigen::Vector3d;
+using Eigen::Vector4d;
 
 namespace Isaac {
   Polygon::Polygon() noexcept : mass(0) {
   }
 
-  Polygon::Polygon(const double &mass_, const std::vector<Vector> &vertices_, const Vector &position_,
-                   const Vector &velocity_, const std::vector<float> &Color_) noexcept {
+  Polygon::Polygon(const float &mass_, const std::vector<Vector3d> &vertices_, const Vector3d &position_,
+                   const Vector3d &velocity_, const Vector4d &Color_) noexcept {
     mass = mass_;
-    vertices = breakVerticesIntoTriangles(vertices_);
+    vertices = vertices_;
     position = position_;
     velocity = velocity_;
     acceleration = {0, 0, 0};
@@ -26,49 +30,49 @@ namespace Isaac {
     Color = other.Color;
   }
 
-  Vector Polygon::getVertex(const std::size_t &index) const noexcept {
-    return vertices[index] + position;
+  Vector3d Polygon::getVertex(const std::size_t &index) const noexcept {
+    return vertices[index];
   }
 
   std::size_t Polygon::getVertexCount() const noexcept {
     return vertices.size();
   }
 
-  double Polygon::getMass() const {
+  float Polygon::getMass() const {
     return mass;
   }
 
-  Vector Polygon::getPosition() const noexcept {
+  Vector3d Polygon::getPosition() const noexcept {
     return position;
   }
 
-  void Polygon::setPosition(const Vector &position_) noexcept {
+  void Polygon::setPosition(const Vector3d &position_) noexcept {
     position = position_;
   }
 
-  Vector Polygon::getVelocity() const noexcept {
+  Vector3d Polygon::getVelocity() const noexcept {
     return velocity;
   }
 
-  void Polygon::setVelocity(const Vector &velocity_) noexcept {
+  void Polygon::setVelocity(const Vector3d &velocity_) noexcept {
     velocity = velocity_;
   }
 
-  Vector Polygon::getAcceleration() const noexcept {
+  Vector3d Polygon::getAcceleration() const noexcept {
     return acceleration;
   }
 
-  void Polygon::setAcceleration(const Vector &acceleration_) noexcept {
+  void Polygon::setAcceleration(const Vector3d &acceleration_) noexcept {
     acceleration = acceleration_;
   }
 
-  std::vector<float> Polygon::getColor() const noexcept {
+  Vector4d Polygon::getColor() const noexcept {
     return Color;
   }
 
-  std::vector<Vector> Polygon::breakVerticesIntoTriangles(const std::vector<Vector> &vertices_) noexcept {
+  std::vector<Vector3d> Polygon::breakVerticesIntoTriangles(const std::vector<Vector3d> &vertices_) noexcept {
     const std::size_t n = vertices_.size();
-    std::vector<Vector> vertices;
+    std::vector<Vector3d> vertices;
     vertices.reserve(3 * (n - 1));
     for (std::size_t i = 0; i < n - 1; ++i) {
       vertices.emplace_back(0, 0, 0);
@@ -78,16 +82,11 @@ namespace Isaac {
     return vertices;
   }
 
-  std::vector<Vector>
+  std::vector<Vector3d>
   Polygon::constructCircleVertices(const double &radius, const std::size_t &totalVertices) noexcept {
-    constexpr double aspectRatio = static_cast<double>(SCREEN_WIDTH) / static_cast<double>(SCREEN_HEIGHT);
-    std::vector<Vector> vertices(totalVertices);
+    std::vector<Vector3d> vertices(totalVertices);
     for (std::size_t i = 0; i < totalVertices; ++i) {
-      if constexpr (aspectRatio > 1.0) {
-        vertices[i] = {radius * std::sin(i * M_PI / 180), (radius * aspectRatio) * std::cos(i * M_PI / 180), 0};
-      } else {
-        vertices[i] = {(radius * aspectRatio) * std::sin(i * M_PI / 180), radius * std::cos(i * M_PI / 180), 0};
-      }
+      vertices[i] = {radius * std::sin(i * M_PI / 180), radius * std::cos(i * M_PI / 180), 0};
     }
     return vertices;
   }

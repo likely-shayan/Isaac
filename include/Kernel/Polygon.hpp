@@ -2,50 +2,55 @@
 #define ISAAC_POLYGON_HPP
 
 #include <vector>
-#include <Kernel/Vector.hpp>
+
+#include <Eigen/Dense>
+
+using Eigen::Vector3d;
+using Eigen::Vector4d;
 
 namespace Isaac {
   class Polygon {
   public:
     Polygon() noexcept;
 
-    Polygon(const double &mass_, const std::vector<Vector> &vertices_, const Vector &position_, const Vector &velocity_,
-            const std::vector<float> &Color_) noexcept;
+    Polygon(const float &mass_, const std::vector<Vector3d> &vertices_, const Vector3d &position_,
+            const Vector3d &velocity_,
+            const Vector4d &Color_) noexcept;
 
     Polygon(const Polygon &other) noexcept;
 
-    [[nodiscard]] Vector getVertex(const std::size_t &index) const noexcept;
+    [[nodiscard]] Vector3d getVertex(const std::size_t &index) const noexcept;
 
     [[nodiscard]] std::size_t getVertexCount() const noexcept;
 
-    [[nodiscard]] double getMass() const;
+    [[nodiscard]] float getMass() const;
 
-    [[nodiscard]] Vector getPosition() const noexcept;
+    [[nodiscard]] Vector3d getPosition() const noexcept;
 
-    void setPosition(const Vector &position_) noexcept;
+    void setPosition(const Vector3d &position_) noexcept;
 
-    [[nodiscard]] Vector getVelocity() const noexcept;
+    [[nodiscard]] Vector3d getVelocity() const noexcept;
 
-    void setVelocity(const Vector &velocity_) noexcept;
+    void setVelocity(const Vector3d &velocity_) noexcept;
 
-    [[nodiscard]] Vector getAcceleration() const noexcept;
+    [[nodiscard]] Vector3d getAcceleration() const noexcept;
 
-    void setAcceleration(const Vector &acceleration_) noexcept;
+    void setAcceleration(const Vector3d &acceleration_) noexcept;
 
-    [[nodiscard]] std::vector<float> getColor() const noexcept;
+    [[nodiscard]] Vector4d getColor() const noexcept;
 
-    static std::vector<Vector> breakVerticesIntoTriangles(const std::vector<Vector> &vertices_) noexcept;
+    static std::vector<Vector3d> breakVerticesIntoTriangles(const std::vector<Vector3d> &vertices_) noexcept;
 
-    static std::vector<Vector> constructCircleVertices(const double &radius,
-                                                       const std::size_t &totalVertices = 360) noexcept;
+    static std::vector<Vector3d> constructCircleVertices(const double &radius,
+                                                         const std::size_t &totalVertices = 360) noexcept;
 
   private:
     double mass;
-    std::vector<Vector> vertices;
-    Vector position;
-    Vector velocity;
-    Vector acceleration;
-    std::vector<float> Color;
+    std::vector<Vector3d> vertices;
+    Vector3d position;
+    Vector3d velocity;
+    Vector3d acceleration;
+    Vector4d Color;
   };
 } // namespace Isaac
 
