@@ -8,7 +8,9 @@
 #include <Rendering/Shader.hpp>
 
 using Eigen::Vector4f;
+using Eigen::Matrix4f;
 using Eigen::Vector4d;
+using Eigen::Matrix4d;
 
 namespace Isaac {
   Shader::Shader() = default;
@@ -81,6 +83,12 @@ namespace Isaac {
     Vector4f floatValue = value.cast<float>();
     glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, floatValue.data());
   }
+
+  void Shader::setMatrix4(const std::string &name, const Matrix4d &value) const noexcept {
+    Matrix4f floatValue = value.cast<float>();
+    glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, floatValue.data());
+  }
+
 
   void Shader::checkCompileErrors(const unsigned int &shader, const std::string &type) {
     int success;

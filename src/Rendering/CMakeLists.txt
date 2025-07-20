@@ -1,6 +1,7 @@
 add_library(Isaac_Rendering
   Window.cpp
   Shader.cpp
+  Camera.cpp
 )
 
 target_include_directories(Isaac_Rendering

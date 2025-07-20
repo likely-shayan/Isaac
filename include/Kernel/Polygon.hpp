@@ -21,6 +21,8 @@ namespace Isaac {
 
     [[nodiscard]] Vector3d getVertex(const std::size_t &index) const noexcept;
 
+    [[nodiscard]] const std::vector<Vector3d>& getVertices() const noexcept;
+
     [[nodiscard]] std::size_t getVertexCount() const noexcept;
 
     [[nodiscard]] float getMass() const;

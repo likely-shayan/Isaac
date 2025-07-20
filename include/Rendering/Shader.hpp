@@ -6,6 +6,7 @@
 #include <Eigen/Dense>
 
 using Eigen::Vector4d;
+using Eigen::Matrix4d;
 
 namespace Isaac {
   class Shader {
@@ -26,6 +27,7 @@ namespace Isaac {
 
     void setVector4(const std::string &name, const Vector4d &value) const noexcept;
 
+    void setMatrix4(const std::string &name, const Matrix4d &value) const noexcept;
   private:
     unsigned int ID;
 

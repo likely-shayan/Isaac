@@ -3,6 +3,7 @@
 
 #include <Kernel/Mesh.hpp>
 #include <Rendering/Shader.hpp>
+#include <Rendering/Camera.hpp>
 
 #include <GLFW/glfw3.h>
 
@@ -13,7 +14,7 @@ namespace Isaac {
 
     explicit Window(std::unique_ptr<Mesh> mesh_) noexcept;
 
-    void Run() const noexcept;
+    void Run() noexcept;
 
     static std::vector<float> adjustedVertices(const std::vector<float> &vertices) noexcept;
 
@@ -25,6 +26,7 @@ namespace Isaac {
     GLFWwindow *window;
     std::unique_ptr<Mesh> mesh;
     Shader shader;
+    Camera camera;
   };
 } // namespace Isaac
 

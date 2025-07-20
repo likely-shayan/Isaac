@@ -14,7 +14,7 @@ namespace Isaac {
   Polygon::Polygon(const float &mass_, const std::vector<Vector3d> &vertices_, const Vector3d &position_,
                    const Vector3d &velocity_, const Vector4d &Color_) noexcept {
     mass = mass_;
-    vertices = breakVerticesIntoTriangles(vertices_);
+    vertices = vertices_;
     position = position_;
     velocity = velocity_;
     acceleration = {0, 0, 0};
@@ -31,8 +31,13 @@ namespace Isaac {
   }
 
   Vector3d Polygon::getVertex(const std::size_t &index) const noexcept {
-    return vertices[index] + position;
+    return vertices[index];
   }
+
+  const std::vector<Vector3d> &Polygon::getVertices() const noexcept {
+    return vertices;
+  }
+
 
   std::size_t Polygon::getVertexCount() const noexcept {
     return vertices.size();

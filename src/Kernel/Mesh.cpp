@@ -96,8 +96,8 @@ namespace Isaac {
       for (std::size_t j = 0; j < n; ++j) {
         if (i == j) { continue; }
 
-        const float radius_i = (polygons[i]->getVertex(1) - polygons[i]->getPosition()).norm();
-        const float radius_j = (polygons[j]->getVertex(1) - polygons[j]->getPosition()).norm();
+        const float radius_i = (polygons[i]->getVertex(1)).norm();
+        const float radius_j = (polygons[j]->getVertex(1)).norm();
         if ((polygons[i]->getPosition() - polygons[j]->getPosition()).norm() <= (radius_i + radius_j)) {
           collidingBodies[i].push_back(j);
         }
