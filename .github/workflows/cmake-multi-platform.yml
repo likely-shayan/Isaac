@@ -1,4 +1,4 @@
-name: Build
+name: build
 on: [push, pull_request]
 
 jobs:
@@ -60,6 +60,14 @@ jobs:
       shell: bash
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+    - name: Cache CMake dependencies
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.strings.outputs.build-output-dir }}/_deps
+        key: ${{ runner.os }}-${{ matrix.c_compiler }}-${{ hashFiles('**/CMakeLists.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.c_compiler }}-
 
     - name: Configure CMake
       run: >
