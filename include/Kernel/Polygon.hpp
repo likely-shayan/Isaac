@@ -39,11 +39,6 @@ namespace Isaac {
 
     [[nodiscard]] Vector4d getColor() const noexcept;
 
-    static std::vector<Vector3d> breakVerticesIntoTriangles(const std::vector<Vector3d> &vertices_) noexcept;
-
-    static std::vector<Vector3d> constructCircleVertices(const double &radius,
-                                                         const std::size_t &totalVertices = 360) noexcept;
-
   private:
     double mass;
     std::vector<Vector3d> vertices;

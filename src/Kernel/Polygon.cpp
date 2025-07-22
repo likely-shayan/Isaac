@@ -69,25 +69,4 @@ namespace Isaac {
   Vector4d Polygon::getColor() const noexcept {
     return Color;
   }
-
-  std::vector<Vector3d> Polygon::breakVerticesIntoTriangles(const std::vector<Vector3d> &vertices_) noexcept {
-    const std::size_t n = vertices_.size();
-    std::vector<Vector3d> vertices;
-    vertices.reserve(3 * (n - 1));
-    for (std::size_t i = 0; i < n - 1; ++i) {
-      vertices.emplace_back(0, 0, 0);
-      vertices.emplace_back(vertices_[i]);
-      vertices.emplace_back(vertices_[i + 1]);
-    }
-    return vertices;
-  }
-
-  std::vector<Vector3d>
-  Polygon::constructCircleVertices(const double &radius, const std::size_t &totalVertices) noexcept {
-    std::vector<Vector3d> vertices(totalVertices);
-    for (std::size_t i = 0; i < totalVertices; ++i) {
-      vertices[i] = {radius * std::sin(i * M_PI / 180), radius * std::cos(i * M_PI / 180), 0};
-    }
-    return vertices;
-  }
 } // namespace Isaac

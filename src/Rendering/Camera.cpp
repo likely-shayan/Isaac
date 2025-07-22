@@ -57,7 +57,7 @@ namespace Isaac {
     yoffset *= mouseSensitivity;
 
     yaw += xoffset;
-    yaw += yoffset;
+    pitch += yoffset;
 
     if (constrainPitch) {
       if (pitch > 89.0)
