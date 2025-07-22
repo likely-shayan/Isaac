@@ -1,4 +1,4 @@
-[![Build](https://github.com/likely-shayan/Isaac/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main&event=push)](https://github.com/likely-shayan/Isaac/actions/workflows/cmake-multi-platform.yml)
+[![ci](https://github.com/likely-shayan/Isaac/actions/workflows/cmake-multi-platform.yml/badge.svg?branch=main&event=push)](https://github.com/likely-shayan/Isaac/actions/workflows/cmake-multi-platform.yml)
 
 ## What is Isaac?
 
