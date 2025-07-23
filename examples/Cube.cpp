@@ -28,7 +28,7 @@ int main() {
   );
 
   Isaac::Mesh mesh(
-    {std::make_shared<Isaac::Polygon>(cube)}
+    {cube}
   );
 
   Isaac::Window window(

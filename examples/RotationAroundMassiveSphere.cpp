@@ -95,7 +95,7 @@ int main() {
   );
 
   Isaac::Mesh mesh(
-    {std::make_shared<Isaac::Polygon>(massiveSphere), std::make_shared<Isaac::Polygon>(smallSphere)}
+    {massiveSphere, smallSphere}
   );
 
   Isaac::Window window(

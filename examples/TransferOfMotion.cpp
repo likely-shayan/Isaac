@@ -1,9 +1,12 @@
-// A red sphere of radius 1000 centered at origin
+// Transfer of Kinetic Energy as Moving Sphere Collides With Stationary Sphere
 
 #include <Kernel/Mesh.hpp>
 #include <Rendering/Window.hpp>
 
+using Eigen::Vector3d;
+
 int main() {
+
   std::vector<Vector3d> sphereVertices;
 
   constexpr int stackCount = 18;
@@ -13,7 +16,7 @@ int main() {
     const double stackAngle2 = M_PI / 2.0 - static_cast<double>(i + 1) * M_PI / static_cast<double>(stackCount);
 
     for (int j = 0; j < sectorCount; ++j) {
-      constexpr double radius = 1000.0;
+      constexpr double radius = 10.0;
       const double sectorAngle1 = static_cast<double>(j) * 2.0 * M_PI / static_cast<double>(sectorCount);
       const double sectorAngle2 = static_cast<double>(j + 1) * 2.0 * M_PI / static_cast<double>(sectorCount);
 
@@ -48,21 +51,17 @@ int main() {
     }
   }
 
-  Isaac::Polygon sphere(
-    1,
-    sphereVertices,
-    {0, 0, 0},
-    {0, 0, 0},
-    {1, 0, 0, 1}
-  );
+  constexpr int Bodies = 50;
+  std::vector<Isaac::Polygon> polygons(Bodies);
 
-  Isaac::Mesh mesh(
-    {sphere}
-  );
+  for (int i = 1; i < Bodies; ++i) {
+    polygons[i] = Isaac::Polygon(1E+1, sphereVertices, {100.0*i, 0, 9500}, {-100, 0, 0}, {1, 0, 0, 1});
+  }
+  polygons[0] = Isaac::Polygon(1E+1, sphereVertices, {0, 0, 9500}, {0, 0, 0}, {1, 0, 0, 1});
 
-  Isaac::Window window(
-    std::make_shared<Isaac::Mesh>(mesh)
-  );
+  Isaac::Mesh mesh(polygons);
+
+  Isaac::Window window(std::make_shared<Isaac::Mesh>(mesh));
 
   window.Run();
 

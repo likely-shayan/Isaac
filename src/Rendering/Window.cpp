@@ -114,16 +114,16 @@ namespace Isaac {
       shader.setMatrix4("view", view);
 
       for (std::size_t i = 0; i < n; ++i) {
-        Vector3d position = mesh->getBody(i)->getPosition();
+        Vector3d position = mesh->getBody(i).getPosition();
         Matrix4d model = Matrix4d::Identity();
         model(0, 3) = position.x();
         model(1, 3) = position.y();
         model(2, 3) = position.z();
         shader.setMatrix4("model", model);
-        shader.setVector4("Color", mesh->getBody(i)->getColor());
+        shader.setVector4("Color", mesh->getBody(i).getColor());
 
         glBindVertexArray(VAOs[i]);
-        glDrawArrays(GL_TRIANGLES, 0, mesh->getBody(i)->getVertexCount());
+        glDrawArrays(GL_TRIANGLES, 0, mesh->getBody(i).getVertexCount());
       }
 
       glfwSwapBuffers(window);
