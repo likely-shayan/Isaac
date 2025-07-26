@@ -34,7 +34,7 @@ make
 ```
 
 All the examples in the examples directory are also converted to executables during building.
-To run an example, Simply go the build directory and run it's executable generated.ls
+To run an example, Simply go the build directory and run it's executable generated.
 
 <h3>Camera Controls</h3>
 <ul>
