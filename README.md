@@ -47,4 +47,4 @@ To run an example, Simply go the build directory and run it's executable generat
 </ul>
 
 <h3>Demonstration of some Examples</h3>
-[![Mutual Rotation](https://raw.githubusercontent.com/likely-shayan/Isaac/Test/Videos/Isaac-Mutual-Rotation-Thumbnail.png)](https://raw.githubusercontent.com/likely-shayan/Isaac/Test/Videos/Isaac-Example-MutualRotation.mp4)
+[![Watch the video](https://img.youtube.com/vi/_5tFXJQIzi4/0.jpg)](https://www.youtube.com/watch?v=_5tFXJQIzi4)
