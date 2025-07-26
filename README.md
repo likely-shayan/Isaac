@@ -45,3 +45,6 @@ To run an example, Simply go the build directory and run it's executable generat
   <li>Escape Key: Close the Window</li>
   <li>Mouse/TrackPad: Move the camera</li>
 </ul>
+
+<h3>Demonstration of some Examples</h3>
+[![Mutual Rotation](https://raw.githubusercontent.com/likely-shayan/Isaac/Test/Videos/Isaac-Mutual-Rotation-Thumbnail.png)](https://raw.githubusercontent.com/likely-shayan/Isaac/Test/Videos/Isaac-Example-MutualRotation.mp4)
