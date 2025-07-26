@@ -19,9 +19,9 @@ namespace Isaac {
 
     explicit Mesh(const std::vector<Polygon> &polygons_) noexcept;
 
-    [[nodiscard]] Polygon& getBody(const std::size_t &index) noexcept;
+    [[nodiscard]] Polygon &getBody(const std::size_t &index) noexcept;
 
-    [[nodiscard]] const Polygon& getBody(const std::size_t &index) const noexcept;
+    [[nodiscard]] const Polygon &getBody(const std::size_t &index) const noexcept;
 
     [[nodiscard]] std::vector<float> getVertices(const std::size_t &index) const noexcept;
 

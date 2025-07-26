@@ -21,9 +21,9 @@ Since free and open source software are forming the backbone of Isaac, We have d
 ## How to try out Isaac?
 Currently, GUI has not been develop so to try out Isaac you have to write code manually and then build it.
 There is a main.cpp file in source directory in which you can write the main code where all the polygons, mesh and window are defined.
-For getting started, Consider to copy-paste any code of your choice from the examples directory.
+For getting started, Consider to look at the source code of some example program from the examples directory.
 
-<h3>Building and Installing Isaac</h3>
+<h3>Building Isaac</h3>
 
 ```
 mkdir build
@@ -32,13 +32,10 @@ cmake ..
 make
 ./Isaac
 ```
-You should see something like "<b>Isaac built successfully</b>"
 
-To run an example, Simply copy-paste it's code into src/main.cpp and run:
-```
-make
-./Isaac
-```
+All the examples in the examples directory are also converted to executables during building.
+To run an example, Simply go the build directory and run it's executable generated.ls
+
 <h3>Camera Controls</h3>
 <ul>
   <li>Arrow Key Up: Move inwards in the Window</li>

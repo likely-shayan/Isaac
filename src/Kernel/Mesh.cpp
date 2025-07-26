@@ -16,7 +16,7 @@ namespace Isaac {
     polygons = polygons_;
   }
 
-  Polygon& Mesh::getBody(const std::size_t &index) noexcept {
+  Polygon &Mesh::getBody(const std::size_t &index) noexcept {
     return polygons[index];
   }
 
@@ -44,7 +44,7 @@ namespace Isaac {
     const std::size_t n = polygons.size();
     const std::vector<Vector3d> GravitationalAcceleration = getNetGravitationalAcceleration();
 
-    #pragma omp parallel for
+#pragma omp parallel for
     for (std::size_t i = 0; i < n; i++) {
       const Vector3d &totalAcceleration = GravitationalAcceleration[i];
       polygons[i].setAcceleration(totalAcceleration);
@@ -82,7 +82,7 @@ namespace Isaac {
     const std::size_t n = polygons.size();
     std::vector<Vector3d> GravitationalAcceleration(n, {0, 0, 0});
 
-    #pragma omp parallel for
+#pragma omp parallel for
     for (std::size_t i = 0; i < n; ++i) {
       for (std::size_t j = 0; j < n; ++j) {
         if (i == j) { continue; }
@@ -98,7 +98,7 @@ namespace Isaac {
     const std::size_t n = polygons.size();
     std::unordered_map<std::size_t, std::vector<std::size_t> > collidingBodies;
 
-    #pragma omp parallel for
+#pragma omp parallel for
     for (std::size_t i = 0; i < n; ++i) {
       for (std::size_t j = 0; j < n; ++j) {
         if (i == j) { continue; }
