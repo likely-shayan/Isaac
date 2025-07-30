@@ -48,7 +48,7 @@ int main() {
     }
   }
 
-  Isaac::Polygon sphere(
+  Isaac::Body sphere(
     1,
     sphereVertices,
     {0, 0, 0},
@@ -61,7 +61,7 @@ int main() {
   );
 
   Isaac::Window window(
-    std::make_shared<Isaac::Mesh>(mesh)
+    mesh
   );
 
   window.Run();

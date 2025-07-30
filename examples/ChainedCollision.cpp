@@ -33,11 +33,11 @@ std::vector<Vector3d> createSphereVertices(const double radius, const int stackC
 int main() {
   constexpr int numSpheres = 8;
   constexpr double radius = 100.0;
-  std::vector<Isaac::Polygon> spheres;
+  std::vector<Isaac::Body> spheres;
   const auto sphereVertices = createSphereVertices(radius);
 
   for (int i = 0; i < numSpheres - 1; ++i) {
-    spheres.emplace_back(Isaac::Polygon(
+    spheres.emplace_back(Isaac::Body(
         10.0,
         sphereVertices,
         {(i * 2.0 * radius) + 1500, 0, 5000},
@@ -47,7 +47,7 @@ int main() {
     );
   }
 
-  spheres.emplace_back(Isaac::Polygon(
+  spheres.emplace_back(Isaac::Body(
       10.0,
       sphereVertices,
       {-500, 0, 5000},
@@ -57,7 +57,7 @@ int main() {
   );
 
   Isaac::Mesh mesh(spheres);
-  Isaac::Window window(std::make_shared<Isaac::Mesh>(mesh));
+  Isaac::Window window(mesh);
   window.Run();
 
   return EXIT_SUCCESS;

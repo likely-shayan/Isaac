@@ -17,12 +17,11 @@ using Eigen::Translation3d;
 namespace Isaac {
   Window::Window() noexcept {
     window = nullptr;
-    mesh = nullptr;
     lastX = SCREEN_WIDTH / 2.0;
     lastY = SCREEN_HEIGHT / 2.0;
   }
 
-  Window::Window(const std::shared_ptr<Mesh> &mesh_) noexcept {
+  Window::Window(const Mesh &mesh_) noexcept {
     mesh = mesh_;
 
     glfwInit();
@@ -64,14 +63,14 @@ namespace Isaac {
   }
 
   void Window::Run() noexcept {
-    const std::size_t n = mesh->getSize();
+    const std::size_t n = mesh.getSize();
 
     unsigned int VBOs[n], VAOs[n];
     glGenVertexArrays(n, VAOs);
     glGenBuffers(n, VBOs);
 
     for (std::size_t i = 0; i < n; ++i) {
-      std::vector<float> vertices = mesh->getVertices(i);
+      std::vector<float> vertices = mesh.getVertices(i);
 
       glBindVertexArray(VAOs[i]);
       glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
@@ -94,7 +93,7 @@ namespace Isaac {
 
       shader.Use();
 
-      mesh->updateBodies();
+      mesh.updateBodies();
 
       constexpr double fov = CAMERA_FOV;
       constexpr double aspect = static_cast<double>(SCREEN_WIDTH) / static_cast<double>(SCREEN_HEIGHT);
@@ -114,16 +113,16 @@ namespace Isaac {
       shader.setMatrix4("view", view);
 
       for (std::size_t i = 0; i < n; ++i) {
-        Vector3d position = mesh->getBody(i).getPosition();
+        Vector3d position = mesh.getBody(i).getPosition();
         Matrix4d model = Matrix4d::Identity();
         model(0, 3) = position.x();
         model(1, 3) = position.y();
         model(2, 3) = position.z();
         shader.setMatrix4("model", model);
-        shader.setVector4("Color", mesh->getBody(i).getColor());
+        shader.setVector4("Color", mesh.getBody(i).getColor());
 
         glBindVertexArray(VAOs[i]);
-        glDrawArrays(GL_TRIANGLES, 0, mesh->getBody(i).getVertexCount());
+        glDrawArrays(GL_TRIANGLES, 0, mesh.getBody(i).getVertexCount());
       }
 
       glfwSwapBuffers(window);

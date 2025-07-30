@@ -1,6 +1,5 @@
 #include <Rendering/Camera.hpp>
 #include <Kernel/Constants.hpp>
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 namespace Isaac {

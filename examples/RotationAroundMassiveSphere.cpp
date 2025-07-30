@@ -78,7 +78,7 @@ int main() {
     }
   }
 
-  Isaac::Polygon massiveSphere(
+  Isaac::Body massiveSphere(
     1E+19,
     massiveSphereVertices,
     {0, 0, 5000},
@@ -86,7 +86,7 @@ int main() {
     {1, 0, 0, 1}
   );
 
-  Isaac::Polygon smallSphere(
+  Isaac::Body smallSphere(
     1,
     smallSphereVertices,
     {0, 1500, 5000},
@@ -99,7 +99,7 @@ int main() {
   );
 
   Isaac::Window window(
-    std::make_shared<Isaac::Mesh>(mesh)
+    mesh
   );
 
   window.Run();

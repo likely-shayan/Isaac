@@ -12,7 +12,7 @@ namespace Isaac {
   public:
     Window() noexcept;
 
-    explicit Window(const std::shared_ptr<Mesh> &mesh_) noexcept;
+    explicit Window(const Mesh &mesh_) noexcept;
 
     void Run() noexcept;
 
@@ -26,7 +26,7 @@ namespace Isaac {
     static void mouse_callback(GLFWwindow *window, double xposIn, double yposIn) noexcept;
 
     GLFWwindow *window;
-    std::shared_ptr<Mesh> mesh;
+    Mesh mesh;
     Shader shader;
     Camera camera;
     double deltaTime = 0, lastFrame = 0, lastX, lastY;

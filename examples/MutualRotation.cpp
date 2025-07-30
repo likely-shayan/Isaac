@@ -33,7 +33,7 @@ std::vector<Vector3d> createSphereVertices(const double radius, const int stackC
 int main() {
   auto starVertices = createSphereVertices(100.0);
 
-  Isaac::Polygon body1(
+  Isaac::Body body1(
     2E+20,
     starVertices,
     {-2000, 0, 0},
@@ -41,7 +41,7 @@ int main() {
     {1, 0.5, 0, 1}
   );
 
-  Isaac::Polygon body2(
+  Isaac::Body body2(
     2E+20,
     starVertices,
     {2000, 0, 0},
@@ -50,7 +50,7 @@ int main() {
   );
 
   Isaac::Mesh mesh({body1, body2});
-  Isaac::Window window(std::make_shared<Isaac::Mesh>(mesh));
+  Isaac::Window window(mesh);
   window.Run();
 
   return EXIT_SUCCESS;

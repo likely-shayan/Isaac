@@ -1,5 +1,5 @@
 add_library(Isaac_Kernel
-        Polygon.cpp
+        Body.cpp
         Mesh.cpp
 )
 

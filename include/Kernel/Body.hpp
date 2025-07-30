@@ -1,5 +1,5 @@
-#ifndef ISAAC_POLYGON_HPP
-#define ISAAC_POLYGON_HPP
+#ifndef ISAAC_BODY_HPP
+#define ISAAC_BODY_HPP
 
 #include <vector>
 
@@ -9,15 +9,15 @@ using Eigen::Vector3d;
 using Eigen::Vector4d;
 
 namespace Isaac {
-  class Polygon {
+  class Body {
   public:
-    Polygon() noexcept;
+    Body() noexcept;
 
-    Polygon(const float &mass_, const std::vector<Vector3d> &vertices_, const Vector3d &position_,
-            const Vector3d &velocity_,
-            const Vector4d &Color_) noexcept;
+    Body(const float &mass_, const std::vector<Vector3d> &vertices_, const Vector3d &position_,
+         const Vector3d &velocity_,
+         const Vector4d &Color_) noexcept;
 
-    Polygon(const Polygon &other) noexcept;
+    Body(const Body &other) noexcept;
 
     [[nodiscard]] Vector3d getVertex(const std::size_t &index) const noexcept;
 
@@ -49,4 +49,4 @@ namespace Isaac {
   };
 } // namespace Isaac
 
-#endif // ISAAC_POLYGON_HPP
+#endif // ISAAC_BODY_HPP

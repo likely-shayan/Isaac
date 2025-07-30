@@ -7,7 +7,7 @@
 
 #include <Eigen/Dense>
 
-#include <Kernel/Polygon.hpp>
+#include <Kernel/Body.hpp>
 
 using Eigen::Vector3d;
 using Eigen::Vector4d;
@@ -17,11 +17,11 @@ namespace Isaac {
   public:
     Mesh() noexcept;
 
-    explicit Mesh(const std::vector<Polygon> &polygons_) noexcept;
+    explicit Mesh(const std::vector<Body> &bodies_) noexcept;
 
-    [[nodiscard]] Polygon &getBody(const std::size_t &index) noexcept;
+    [[nodiscard]] Body &getBody(const std::size_t &index) noexcept;
 
-    [[nodiscard]] const Polygon &getBody(const std::size_t &index) const noexcept;
+    [[nodiscard]] const Body &getBody(const std::size_t &index) const noexcept;
 
     [[nodiscard]] std::vector<float> getVertices(const std::size_t &index) const noexcept;
 
@@ -34,7 +34,7 @@ namespace Isaac {
     [[nodiscard]] std::unordered_map<std::size_t, std::vector<std::size_t> > getCollidingBodies() const noexcept;
 
   private:
-    std::vector<Polygon> polygons;
+    std::vector<Body> bodies;
   };
 } // namespace Isaac
 

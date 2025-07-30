@@ -32,14 +32,14 @@ std::vector<Vector3d> createSphereVertices(const double radius, const int stackC
 }
 
 int main() {
-  std::vector<Isaac::Polygon> particles;
+  std::vector<Isaac::Body> particles;
   const auto particleVertices = createSphereVertices(50.0);
 
   constexpr int clusterSize = 100;
   std::mt19937 rng(std::random_device{}());
   std::uniform_real_distribution<double> dist(-500, 500);
   for (int i = 0; i < clusterSize; ++i) {
-    particles.emplace_back(Isaac::Polygon(
+    particles.emplace_back(Isaac::Body(
         10.0,
         particleVertices,
         {dist(rng), dist(rng), dist(rng)},
@@ -49,7 +49,7 @@ int main() {
     );
   }
 
-  particles.emplace_back(Isaac::Polygon(
+  particles.emplace_back(Isaac::Body(
       1E+20,
       createSphereVertices(60.0),
       {5000, 5000, 5000},
@@ -59,7 +59,7 @@ int main() {
   );
 
   Isaac::Mesh mesh(particles);
-  Isaac::Window window(std::make_shared<Isaac::Mesh>(mesh));
+  Isaac::Window window(mesh);
   window.Run();
 
   return EXIT_SUCCESS;

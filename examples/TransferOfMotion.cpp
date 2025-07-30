@@ -51,16 +51,16 @@ int main() {
   }
 
   constexpr int Bodies = 50;
-  std::vector<Isaac::Polygon> polygons(Bodies);
+  std::vector<Isaac::Body> polygons(Bodies);
 
   for (int i = 1; i < Bodies; ++i) {
-    polygons[i] = Isaac::Polygon(1E+1, sphereVertices, {100.0 * i, 0, 9500}, {-100, 0, 0}, {1, 0, 0, 1});
+    polygons[i] = Isaac::Body(1E+1, sphereVertices, {100.0 * i, 0, 9500}, {-100, 0, 0}, {1, 0, 0, 1});
   }
-  polygons[0] = Isaac::Polygon(1E+1, sphereVertices, {0, 0, 9500}, {0, 0, 0}, {1, 0, 0, 1});
+  polygons[0] = Isaac::Body(1E+1, sphereVertices, {0, 0, 9500}, {0, 0, 0}, {1, 0, 0, 1});
 
   Isaac::Mesh mesh(polygons);
 
-  Isaac::Window window(std::make_shared<Isaac::Mesh>(mesh));
+  Isaac::Window window(mesh);
 
   window.Run();
 

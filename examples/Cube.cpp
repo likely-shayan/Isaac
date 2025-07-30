@@ -19,7 +19,7 @@ int main() {
     {1000, 1000, -1000}
   };
 
-  Isaac::Polygon cube(
+  Isaac::Body cube(
     1,
     cubeVertices,
     {0, 0, 0},
@@ -32,7 +32,7 @@ int main() {
   );
 
   Isaac::Window window(
-    std::make_shared<Isaac::Mesh>(mesh)
+    mesh
   );
 
   window.Run();
