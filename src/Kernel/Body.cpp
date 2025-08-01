@@ -1,7 +1,6 @@
 #include <cmath>
 #include <vector>
 
-#include <Kernel/Constants.hpp>
 #include <Kernel/Body.hpp>
 
 using Eigen::Vector3d;
@@ -11,14 +10,14 @@ namespace Isaac {
   Body::Body() noexcept : mass(0) {
   }
 
-  Body::Body(const float &mass_, const std::vector<Vector3d> &vertices_, const Vector3d &position_,
-             const Vector3d &velocity_, const Vector4d &Color_) noexcept {
+  Body::Body(const double &mass_, const std::vector<Vector3d> &vertices_, const Vector3d &position_,
+             const Vector3d &velocity_, const Vector4d &color_) noexcept {
     mass = mass_;
     vertices = vertices_;
     position = position_;
     velocity = velocity_;
     acceleration = {0, 0, 0};
-    Color = Color_;
+    color = color_;
   }
 
   Body::Body(const Body &other) noexcept {
@@ -27,7 +26,7 @@ namespace Isaac {
     position = other.position;
     velocity = other.velocity;
     acceleration = other.acceleration;
-    Color = other.Color;
+    color = other.color;
   }
 
   Vector3d Body::getVertex(const std::size_t &index) const noexcept {
@@ -38,7 +37,7 @@ namespace Isaac {
     return vertices.size();
   }
 
-  float Body::getMass() const {
+  double Body::getMass() const {
     return mass;
   }
 
@@ -67,6 +66,6 @@ namespace Isaac {
   }
 
   Vector4d Body::getColor() const noexcept {
-    return Color;
+    return color;
   }
 } // namespace Isaac

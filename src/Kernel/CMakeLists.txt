@@ -1,6 +1,13 @@
 add_library(Isaac_Kernel
         Body.cpp
         Mesh.cpp
+        Tetrahedron.cpp
+        Cube.cpp
+        Octahedron.cpp
+        SquarePyramid.cpp
+        Dodecahedron.cpp
+        Icosahedron.cpp
+        Sphere.cpp
 )
 
 find_package(Eigen3 3.4.0 CONFIG QUIET)

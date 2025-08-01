@@ -15,15 +15,7 @@ using Eigen::Affine3d;
 using Eigen::Translation3d;
 
 namespace Isaac {
-  Window::Window() noexcept {
-    window = nullptr;
-    lastX = SCREEN_WIDTH / 2.0;
-    lastY = SCREEN_HEIGHT / 2.0;
-  }
-
-  Window::Window(const Mesh &mesh_) noexcept {
-    mesh = mesh_;
-
+  Window::Window(Mesh &mesh_) noexcept : mesh(mesh_) {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);

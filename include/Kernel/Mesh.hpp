@@ -8,6 +8,13 @@
 #include <Eigen/Dense>
 
 #include <Kernel/Body.hpp>
+#include <Kernel/Tetrahedron.hpp>
+#include <Kernel/Cube.hpp>
+#include <Kernel/Octahedron.hpp>
+#include <Kernel/SquarePyramid.hpp>
+#include <Kernel/Dodecahedron.hpp>
+#include <Kernel/Icosahedron.hpp>
+#include <Kernel/Sphere.hpp>
 
 using Eigen::Vector3d;
 using Eigen::Vector4d;
@@ -17,7 +24,7 @@ namespace Isaac {
   public:
     Mesh() noexcept;
 
-    explicit Mesh(const std::vector<Body> &bodies_) noexcept;
+    explicit Mesh(std::vector<std::unique_ptr<Body> > bodies_) noexcept;
 
     [[nodiscard]] Body &getBody(const std::size_t &index) noexcept;
 
@@ -34,7 +41,7 @@ namespace Isaac {
     [[nodiscard]] std::unordered_map<std::size_t, std::vector<std::size_t> > getCollidingBodies() const noexcept;
 
   private:
-    std::vector<Body> bodies;
+    std::vector<std::unique_ptr<Body> > bodies;
   };
 } // namespace Isaac
 

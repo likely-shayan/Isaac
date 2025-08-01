@@ -13,9 +13,9 @@ namespace Isaac {
   public:
     Body() noexcept;
 
-    Body(const float &mass_, const std::vector<Vector3d> &vertices_, const Vector3d &position_,
+    Body(const double &mass_, const std::vector<Vector3d> &vertices_, const Vector3d &position_,
          const Vector3d &velocity_,
-         const Vector4d &Color_) noexcept;
+         const Vector4d &color_) noexcept;
 
     Body(const Body &other) noexcept;
 
@@ -23,7 +23,7 @@ namespace Isaac {
 
     [[nodiscard]] std::size_t getVertexCount() const noexcept;
 
-    [[nodiscard]] float getMass() const;
+    [[nodiscard]] double getMass() const;
 
     [[nodiscard]] Vector3d getPosition() const noexcept;
 
@@ -39,13 +39,15 @@ namespace Isaac {
 
     [[nodiscard]] Vector4d getColor() const noexcept;
 
+    virtual ~Body() = default;
+
   private:
     double mass;
     std::vector<Vector3d> vertices;
     Vector3d position;
     Vector3d velocity;
     Vector3d acceleration;
-    Vector4d Color;
+    Vector4d color;
   };
 } // namespace Isaac
 
